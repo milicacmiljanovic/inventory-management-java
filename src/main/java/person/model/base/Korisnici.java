@@ -16,6 +16,13 @@ public class Korisnici {
     private String password;
     private LocalDate datum_rodjenja;
 
+    public Korisnici(int korisnik_id, String ime, String prezime, LocalDate datum_rodjenja) {
+        this.korisnik_id = korisnik_id;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.datum_rodjenja = datum_rodjenja;
+    }
+
     public Korisnici(int korisnikId, String ime, String prezime, String username, String password, LocalDate datumRodjenja) {
         this.korisnik_id = korisnikId;
         this.ime = ime;

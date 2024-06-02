@@ -1,30 +1,30 @@
 package person.model.base;
 
 public class StambeniObjekat {
-    private final int stambeni_objekat_id;
-    private String vrsta_stambenog_objekta;
+    private final int stambeniObjekatId;
+    private String vrstaStambenogObjekta;
     private int kvadratura;
-    private int broj_stanara;
+    private int brojStanara;
     private boolean dostupnost = true;
 
-    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost) {
-        this.stambeni_objekat_id = stambeni_objekat_id;
-        this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
+    public StambeniObjekat(int stambeniObjekatId, String vrstaStambenogObjekta, int kvadratura, int brojStanara, boolean dostupnost) {
+        this.stambeniObjekatId = stambeniObjekatId;
+        this.vrstaStambenogObjekta = vrstaStambenogObjekta;
         this.kvadratura = kvadratura;
-        this.broj_stanara = broj_stanara;
+        this.brojStanara = brojStanara;
         this.dostupnost = dostupnost;
     }
 
-    public int getStambeni_objekat_id() {
-        return stambeni_objekat_id;
+    public int getStambeniObjekatId() {
+        return stambeniObjekatId;
     }
 
     public String getVrsta_stambenog_objekta() {
-        return vrsta_stambenog_objekta;
+        return vrstaStambenogObjekta;
     }
 
-    public void setVrsta_stambenog_objekta(String vrsta_stambenog_objekta) {
-        this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
+    public void setVrstaStambenogObjekta(String vrstaStambenogObjekta) {
+        this.vrstaStambenogObjekta = vrstaStambenogObjekta;
     }
 
     public int getKvadratura() {
@@ -35,12 +35,12 @@ public class StambeniObjekat {
         this.kvadratura = kvadratura;
     }
 
-    public int getBroj_stanara() {
-        return broj_stanara;
+    public int getBrojStanara() {
+        return brojStanara;
     }
 
-    public void setBroj_stanara(int broj_stanara) {
-        this.broj_stanara = broj_stanara;
+    public void setBrojStanara(int broj_stanara) {
+        this.brojStanara = brojStanara;
     }
 
     public boolean isDostupnost() {
