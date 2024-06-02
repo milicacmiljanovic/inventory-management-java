@@ -26,7 +26,7 @@ public class JDBCUtils {
 
     public static List<Korisnici> selectAllFromZus() {
         List<Korisnici> people = new ArrayList<>();
-        String query = "select * from zus";
+        String query = "select * from zus.korisnici";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
