@@ -24,25 +24,23 @@ public class JDBCUtils {
     }
 
     public static List<Korisnici> selectAllFromZus() {
-        List<Korisnici> people = new ArrayList<>();
-        String query = "select * from zus.korisnici";
+        List<Korisnici> korisnici = new ArrayList<>();
+        String query = "select * from zus.korisnici"; //ovde ne treba *
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                int personId = resultSet.getInt(1);
-                String firstName = resultSet.getString(2);
-                String lastName = resultSet.getString(3);
-                String username = resultSet.getString(4);
-                String password = resultSet.getString(5);
-                LocalDate dateOfBirth = resultSet.getDate(6).toLocalDate();
-                Korisnici person = new Korisnici(personId, firstName, lastName, username, password, dateOfBirth);
-                people.add(person);
+                int korisnikId = resultSet.getInt(1);
+                String ime = resultSet.getString(2);
+                String prezime = resultSet.getString(3);;
+                LocalDate datumRodjenja = resultSet.getDate(6).toLocalDate();
+                Korisnici korisnik = new Korisnici(korisnikId, ime, prezime, datumRodjenja);
+                korisnici.add(korisnik);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return people;
+        return korisnici;
     }
     public static List<Objekat> selectObjekatFromZus(){
         List<Objekat> objekti = new ArrayList<>();
@@ -115,7 +113,7 @@ public class JDBCUtils {
 
     public static List<Korisnici> selectFromPerson(String firstName, String lastName, String yearOfBirth) {
         List<Korisnici> oldPeople = selectAllFromZus();
-        Server.SERVER.setPeople(oldPeople);
+        Server.SERVER.setKorisnici(oldPeople);
         List<Korisnici> people = new ArrayList<>();
         for (Korisnici oldPerson : oldPeople) {
             if (yearOfBirth == null || yearOfBirth.length() != 4) {

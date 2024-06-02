@@ -13,14 +13,14 @@ public class Server {
     private final List<Korisnici> korisnici = new ArrayList<>();
 
     private Server() {
-        this.setPeople(JDBCUtils.selectAllFromZus());
+        this.setKorisnici(JDBCUtils.selectAllFromZus());
          }
 
-    public List<Korisnici> getPeople() {
+    public List<Korisnici> getKorisnici() {
         return korisnici;
     }
 
-    public void setPeople(Collection<Korisnici> people) {
+    public void setKorisnici(Collection<Korisnici> people) {
         this.korisnici.clear();
         this.korisnici.addAll(korisnici);
     }

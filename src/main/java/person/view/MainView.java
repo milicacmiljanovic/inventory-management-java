@@ -19,7 +19,7 @@ public class MainView extends Stage {
 
     private final BorderPane root = new BorderPane();
 
-    private final TableView<Korisnici> tvPeople = new PersonTable(Server.SERVER.getPeople());
+    private final TableView<Korisnici> tvPeople = new PersonTable(Server.SERVER.getKorisnici());
 
     private final TextField tfFirstNameFilter = new TextField();
     private final TextField tfLastNameFilter = new TextField();
@@ -47,9 +47,9 @@ public class MainView extends Stage {
 
     private HBox filterBox() {
         HBox hbox = new HBox(10, new Label("First name:"), this.tfFirstNameFilter,
-                                new Label("Last name:"), this.tfLastNameFilter,
-                                new Label("Year:"), this.tfYearFilter,
-                                this.btFilter);
+                new Label("Last name:"), this.tfLastNameFilter,
+                new Label("Year:"), this.tfYearFilter,
+                this.btFilter);
         hbox.setPadding(new Insets(10));
         hbox.setAlignment(Pos.CENTER);
         return hbox;
