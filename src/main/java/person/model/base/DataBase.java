@@ -13,7 +13,7 @@ public class DataBase {
 
     public DataBase() {
         try {
-            // Load MySQL JDBC Driver
+
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
