@@ -133,17 +133,17 @@ public class JDBCUtils {
         return people;
     }
 
-    public static void insertIntoZus(String firstName, String lastName, LocalDate dateOfBirth) {
-        String query = "insert into zus (first_name, last_name, date_of_birth)" +
+    public static void insertIntoZus(String ime, String prezime, LocalDate datum_rodjenja) {
+        String query = "insert into zus.korisnici (ime, prezime, datum_rodjenja)" +
                 "values (?, ?, str_to_date(?, '%m/%d/%Y'))";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             connection.setAutoCommit(false);
-            statement.setString(1, firstName);
-            statement.setString(2, lastName);
+            statement.setString(1, ime);
+            statement.setString(2, prezime);
             statement.setString(3,
-                    dateOfBirth.getMonthValue() + "/" +
-                    dateOfBirth.getDayOfMonth() + "/" + dateOfBirth.getYear());
+                    datum_rodjenja.getMonthValue() + "/" +
+                    datum_rodjenja.getDayOfMonth() + "/" + datum_rodjenja.getYear());
             statement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {

@@ -2,11 +2,7 @@ package person.view;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -14,6 +10,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import person.model.base.DataBase;
+import person.model.utility.JDBCUtils;
+
+import java.time.LocalDate;
 
 
 public class LogInView extends Application{
@@ -22,6 +21,7 @@ public class LogInView extends Application{
 
     private final TextField tfUsername = new TextField();
     private final PasswordField pfPassword = new PasswordField();
+
     private final Button btLogin = new Button("Login");
     private final Button btRegister = new Button("Register");
 
@@ -38,9 +38,11 @@ public class LogInView extends Application{
         });
 
         this.btRegister.setOnAction(event -> {
-            String username = this.tfUsername.getText();
-            String password = this.pfPassword.getText();
-            handleRegister(username, password);
+
+            //String username = this.tfUsername.getText();
+            //String password = this.pfPassword.getText();
+
+            handleRegister(primaryStage);
         });
 
         this.root.setCenter(this.loginForm());
@@ -84,8 +86,17 @@ public class LogInView extends Application{
         }
     }
 
-    private void handleRegister(String username, String password) {
-        if (databaseService.addUser(username, password)) {
+    private HBox titleBox1() {
+        HBox hbox = new HBox(new Label("Register"));
+        hbox.setPadding(new Insets(10));
+        hbox.setAlignment(Pos.CENTER);
+        return hbox;
+    }
+
+    /*
+    private void handleRegister(String ime, String prezime, String username, String password, LocalDate datum_rodjenja, Stage primaryStage) {
+        if (databaseService.addUser(ime, prezime, username, password, datum_rodjenja)) {
+            openMainView(primaryStage);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Registration Successful");
             alert.setHeaderText(null);
@@ -99,13 +110,20 @@ public class LogInView extends Application{
             alert.showAndWait();
         }
     }
+     */
+    private void handleRegister(Stage primaryStage) {
+            openRegisterView(primaryStage);
+    }
 
     private void openMainView(Stage primaryStage) {
-        BorderPane mainView = new BorderPane();
-        mainView.setCenter(new Label("Welcome to the Main View!"));
-        Scene mainScene = new Scene(mainView, 400, 300);
-        primaryStage.setScene(mainScene);
-        primaryStage.setTitle("Main View");
+        JDBCUtils.connect();
+        primaryStage = new MainView();
+        primaryStage.show();
+    }
+    private void openRegisterView(Stage primaryStage){
+        JDBCUtils.connect();
+        primaryStage = new RegisterView();
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
