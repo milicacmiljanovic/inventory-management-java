@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import person.model.base.Korisnici;
+import person.model.Korisnici;
 import person.model.utility.JDBCUtils;
 
 import java.util.List;
