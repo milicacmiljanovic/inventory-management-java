@@ -1,5 +1,8 @@
 package person.model.utility;
 
+import person.model.Korisnici;
+import person.model.Objekat;
+import person.model.StambeniObjekat;
 import person.model.base.*;
 
 import java.sql.*;

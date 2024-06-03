@@ -1,17 +1,20 @@
 package person.view;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import person.model.base.DataBase;
 
-import java.sql.*;
-import java.time.LocalDate;
 
 public class LogInView extends Application{
 
@@ -20,7 +23,9 @@ public class LogInView extends Application{
     private final TextField tfUsername = new TextField();
     private final PasswordField pfPassword = new PasswordField();
     private final Button btLogin = new Button("Login");
-    private final Button btCancel = new Button("Cancel");
+    private final Button btRegister = new Button("Register");
+
+    private DataBase databaseService = new DataBase();
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,15 +34,13 @@ public class LogInView extends Application{
         this.btLogin.setOnAction(event -> {
             String username = this.tfUsername.getText();
             String password = this.pfPassword.getText();
-            // Handle the login logic here
-            System.out.println("Username: " + username);
-            System.out.println("Password: " + password);
+            handleLogin(username, password, primaryStage);
         });
 
-        this.btCancel.setOnAction(event -> {
-            // Clear the fields
-            this.tfUsername.clear();
-            this.pfPassword.clear();
+        this.btRegister.setOnAction(event -> {
+            String username = this.tfUsername.getText();
+            String password = this.pfPassword.getText();
+            handleRegister(username, password);
         });
 
         this.root.setCenter(this.loginForm());
@@ -59,7 +62,7 @@ public class LogInView extends Application{
         GridPane gridPane = new GridPane();
         gridPane.addRow(0, new Label("Username:"), this.tfUsername);
         gridPane.addRow(1, new Label("Password:"), this.pfPassword);
-        HBox buttonBox = new HBox(10, this.btLogin, this.btCancel);
+        HBox buttonBox = new HBox(10, this.btLogin, this.btRegister);
         buttonBox.setAlignment(Pos.CENTER);
         gridPane.add(buttonBox, 1, 2);
         gridPane.setVgap(10);
@@ -67,6 +70,42 @@ public class LogInView extends Application{
         gridPane.setPadding(new Insets(10));
         gridPane.setAlignment(Pos.CENTER);
         return gridPane;
+    }
+
+    private void handleLogin(String username, String password, Stage primaryStage) {
+        if (databaseService.validateUser(username, password)) {
+            openMainView(primaryStage);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid username or password.");
+            alert.showAndWait();
+        }
+    }
+
+    private void handleRegister(String username, String password) {
+        if (databaseService.addUser(username, password)) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registration Successful");
+            alert.setHeaderText(null);
+            alert.setContentText("User registered successfully.");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Registration Error");
+            alert.setHeaderText(null);
+            alert.setContentText("User registration failed.");
+            alert.showAndWait();
+        }
+    }
+
+    private void openMainView(Stage primaryStage) {
+        BorderPane mainView = new BorderPane();
+        mainView.setCenter(new Label("Welcome to the Main View!"));
+        Scene mainScene = new Scene(mainView, 400, 300);
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("Main View");
     }
 
     public static void main(String[] args) {

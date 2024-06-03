@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import person.model.base.Korisnici;
+import person.model.Korisnici;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,10 +18,10 @@ public class PersonTable extends TableView<Korisnici> {
         TableColumn<Korisnici, String> tcLastName = new TableColumn<>("Last Name");
         TableColumn<Korisnici, LocalDate> tcDOB = new TableColumn<>("Date of Birth");
 
-        tcPersonId.setCellValueFactory(new PropertyValueFactory<>("personId"));
-        tcFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        tcLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        tcDOB.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        tcPersonId.setCellValueFactory(new PropertyValueFactory<>("korisnik_id"));
+        tcFirstName.setCellValueFactory(new PropertyValueFactory<>("ime"));
+        tcLastName.setCellValueFactory(new PropertyValueFactory<>("prezime"));
+        tcDOB.setCellValueFactory(new PropertyValueFactory<>("datum_rodjenja"));
 
         super.getColumns().add(tcPersonId);
         super.getColumns().add(tcFirstName);

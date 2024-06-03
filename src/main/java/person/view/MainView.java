@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import person.controller.AddControl;
 import person.controller.FilterControl;
-import person.model.base.Korisnici;
+import person.model.Korisnici;
 import person.model.base.Server;
 
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ public class MainView extends Stage {
     private final Button btAdd = new Button("Add new person");
 
     public MainView() {
-        super.setTitle("Person JDBC");
+        super.setTitle("ZUS");
 
         this.btFilter.setOnAction(new FilterControl(this.tfFirstNameFilter, this.tfLastNameFilter, this.tfYearFilter, this.tvPeople));
         this.btAdd.setOnAction(new AddControl(this.tfFirstName, this.tfLastName, this.dpDateOfBirth, this.tvPeople));

@@ -1,5 +1,6 @@
 package person.model.base;
 
+import person.model.Korisnici;
 import person.model.utility.JDBCUtils;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Server {
         return korisnici;
     }
 
-    public void setKorisnici(Collection<Korisnici> people) {
+    public void setKorisnici(Collection<Korisnici> korisnici) {
         this.korisnici.clear();
         this.korisnici.addAll(korisnici);
     }
