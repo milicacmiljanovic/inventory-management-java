@@ -20,7 +20,7 @@ public class JDBCUtils {
         properties.put("user", "root");
         properties.put("password", "");
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/zus", properties);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/zus", properties);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -133,23 +133,89 @@ public class JDBCUtils {
         return people;
     }
 
-    public static void insertIntoZus(String ime, String prezime, LocalDate datum_rodjenja) {
-        String query = "insert into zus.korisnici (ime, prezime, datum_rodjenja)" +
-                "values (?, ?, str_to_date(?, '%m/%d/%Y'))";
+
+    /*
+    * public static void insertIntoZus(Korisnici korisnik) {
+        //String query = "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja)" +
+        //        "values (?, ?, str_to_date(?, '%m/%d/%Y'))";
+        String query =  "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja) " +
+                "values (?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y'))" +
+                "from dual" +
+                "where not exists (" +
+                "select 1 from zus.korisnici where username = ?" +
+                ")";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             connection.setAutoCommit(false);
-            statement.setString(1, ime);
-            statement.setString(2, prezime);
-            statement.setString(3,
-                    datum_rodjenja.getMonthValue() + "/" +
-                    datum_rodjenja.getDayOfMonth() + "/" + datum_rodjenja.getYear());
+            statement.setString(1, korisnik.getIme());
+            statement.setString(2, korisnik.getPrezime());
+            statement.setString(3, korisnik.getUsername());
+            statement.setString(4, korisnik.getPassword());
+            statement.setString(5,
+                    korisnik.getDatum_rodjenja().getMonthValue() + "/" +
+                            korisnik.getDatum_rodjenja().getDayOfMonth() + "/" +
+                            korisnik.getDatum_rodjenja().getYear());
+            // obrisi posle
+            statement.setString(6, korisnik.getUsername());
             statement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+    * */
+
+    public static void insertIntoZus(Korisnici korisnik) {
+        String query = "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja) " +
+                "select ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y') " +
+                "from dual " +
+                "where not exists ( " +
+                "select 1 from zus.korisnici WHERE username = ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            connection.setAutoCommit(false);
+            statement.setString(1, korisnik.getIme());
+            statement.setString(2, korisnik.getPrezime());
+            statement.setString(3, korisnik.getUsername());
+            statement.setString(4, korisnik.getPassword());
+            statement.setString(5, korisnik.getDatum_rodjenja().getMonthValue() + "/" +
+                    korisnik.getDatum_rodjenja().getDayOfMonth() + "/" +
+                    korisnik.getDatum_rodjenja().getYear());
+            statement.setString(6, korisnik.getUsername()); // For the NOT EXISTS clause
+
+            int rowsAffected = statement.executeUpdate();
+            connection.commit();
+
+            if (rowsAffected > 0) {
+                System.out.println("User inserted successfully.");
+            } else {
+                System.out.println("User with this username already exists.");
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static int getNextKorisnikId() {
+        String query = "SELECT MAX(korisnik_id) FROM zus.korisnici";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) + 1;
+            } else {
+                return 1; // If the table is empty, start with 1
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving next korisnik_id", e);
+        }
+    }
+
 
     private JDBCUtils() {
 

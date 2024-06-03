@@ -30,6 +30,7 @@ public class Korisnici {
         this.username = username;
         this.password = password;
         this.datum_rodjenja = datumRodjenja;
+
     }
 
     public int getKorisnik_id() {
