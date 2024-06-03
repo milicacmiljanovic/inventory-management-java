@@ -34,9 +34,9 @@ public class AddControl implements EventHandler<ActionEvent> {
         String lastName = this.lastNameTextField.getText().trim();
         LocalDate dateOfBirth = this.dateOfBirthPicker.getValue();
         JDBCUtils.insertIntoZus(firstName, lastName, dateOfBirth);
-        List<Korisnici> people = JDBCUtils.selectAllFromZus();
-        Server.SERVER.setPeople(people);
-        this.personTableView.setItems(FXCollections.observableArrayList(people));
+        List<Korisnici> korisnici = JDBCUtils.selectAllFromZus();
+        Server.SERVER.setKorisnici(korisnici);
+        this.personTableView.setItems(FXCollections.observableArrayList(korisnici));
         this.firstNameTextField.clear();
         this.lastNameTextField.clear();
         this.dateOfBirthPicker.setValue(LocalDate.now().minusYears(20));
