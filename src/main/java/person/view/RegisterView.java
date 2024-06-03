@@ -44,7 +44,9 @@ public class RegisterView extends Stage {
         gridPane.addRow(3,new Label("Username:"), this.tfUsername);
         gridPane.addRow(4, new Label("Password:"), this.tfPassword);
         gridPane.addRow(5, new Label("Date of birth:"), this.dpDateOfBirth);
-        gridPane.add(this.btAdd, 6, 0);
+        this.btAdd.setPrefWidth(150);
+        gridPane.add(this.btAdd, 0, 6, 2, 1);
+        GridPane.setHalignment(this.btAdd, javafx.geometry.HPos.CENTER);
         gridPane.setVgap(10);
         gridPane.setHgap(10);
         gridPane.setPadding(new Insets(10));
