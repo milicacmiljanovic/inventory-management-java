@@ -1,4 +1,4 @@
-package person.model.base;
+package person.model;
 
 
 

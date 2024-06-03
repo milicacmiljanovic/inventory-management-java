@@ -28,21 +28,17 @@ public class LogInControl implements EventHandler<ActionEvent> {
         String username = this.usernameTextField.getText().trim();
         String password = this.passwordField.getText().trim();
 
-        // Placeholder for the actual login logic
         if (authenticate(username, password)) {
             System.out.println("Login successful for user: " + username);
         } else {
             System.out.println("Login failed for user: " + username);
         }
 
-        // Clear fields after attempt
         this.usernameTextField.clear();
         this.passwordField.clear();
     }
 
     private boolean authenticate(String username, String password) {
-        // Implement your actual authentication logic here
-        // This is just a dummy implementation
         return "user".equals(username) && "password".equals(password);
     }
 }
