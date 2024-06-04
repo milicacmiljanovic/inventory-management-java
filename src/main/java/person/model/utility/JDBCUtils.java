@@ -83,7 +83,7 @@ public class JDBCUtils {
                 int visina = resultSet.getInt(10);
                 int brzina_orbitiranja = resultSet.getInt(11);
                 int broj_umrlih = resultSet.getInt(12);
-                Objekat objekat = new Objekat(objekat_id,naziv, vrsta);
+                Objekat objekat = new Objekat(objekat_id,naziv, vrsta, udaljenost_od_planete, najniza_temperatura, najvisa_temperatura, kiseonik, drugi_gas, kolicina_drugog_gasa,visina, brzina_orbitiranja, broj_umrlih);
                 objekti.add(objekat);
             }
         } catch (SQLException e) {
@@ -131,6 +131,20 @@ public class JDBCUtils {
                 people.add(oldPerson);
         }
         return people;
+    }
+
+
+    public static List<Objekat> selectFromPlanet(String nameFilter) {
+        List<Objekat> planets = selectDetaljanObjekatFromZus(); // Assuming this method retrieves all planets
+        List<Objekat> filteredPlanets = new ArrayList<>();
+
+        for (Objekat planet : planets) {
+            if (planet.getNaziv().toLowerCase().contains(nameFilter.toLowerCase())) {
+                filteredPlanets.add(planet);
+            }
+        }
+
+        return filteredPlanets;
     }
 
 
