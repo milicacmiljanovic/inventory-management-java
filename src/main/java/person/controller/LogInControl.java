@@ -2,17 +2,9 @@ package person.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import person.model.utility.JDBCUtils;
-import person.view.ObjectView;
-
-import java.sql.*;
-import java.time.LocalDate;
+import person.view.ObjectsView;
 
 
 public class LogInControl implements EventHandler<ActionEvent> {
@@ -47,8 +39,8 @@ public class LogInControl implements EventHandler<ActionEvent> {
 
     private void openObjectView() {
         JDBCUtils.connect();
-        ObjectView objectView = new ObjectView();
-        objectView.show();
+        ObjectsView objectsView = new ObjectsView();
+        objectsView.show();
     }
 
 }

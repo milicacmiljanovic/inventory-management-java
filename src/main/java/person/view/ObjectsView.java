@@ -10,16 +10,17 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import person.controller.FilterControlObject;
 import person.model.Misija;
+import person.model.MissionPlanetCombo;
 import person.model.Objekat;
 import person.model.base.Server;
 
-public class ObjectView extends Stage {
+public class ObjectsView extends Stage {
 
     private final BorderPane root = new BorderPane();
 
     private final TableView<Objekat> tvObjects = new ObjectsTable(Server.SERVER.getObjekti());
 
-    //private final TableView<Misija> tvMissions = new TableView<>(Server.SERVER.getMisije());
+    private final TableView<MissionPlanetCombo> tvMissionsAndPlanets = new MissionsTable(Server.SERVER.getMisijeIPlanete());
 
     private final TextField tfPlanetNameFilter = new TextField();
     private final Button btFilterObj = new Button("Filter");
@@ -30,19 +31,23 @@ public class ObjectView extends Stage {
       //      LocalDate.now().minusYears(20));
     private final Button btAdd = new Button("Add new person");
 
-    public ObjectView() {
+    public ObjectsView() {
         super.setTitle("PlanetView");
 
         this.btFilterObj.setOnAction(new FilterControlObject(this.tfPlanetNameFilter, this.tvObjects));
 
         //NAJBITNIJE OVDE
         this.root.setLeft(this.tvObjects);
+        this.tvObjects.setMinWidth(350);
         this.root.setTop(this.filterBox());
         this.root.setCenter(this.addBox());
         this.root.setPadding(new Insets(10));
+        this.root.setRight(this.tvMissionsAndPlanets);
+        this.tvObjects.setMinWidth(600);
         //this.root.setRight(this.tvMissions);
 
         super.setScene(new Scene(this.root));
+        this.setMinWidth(1000);
     }
 
     private HBox filterBox() {

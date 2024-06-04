@@ -2,6 +2,7 @@ package person.model.base;
 
 import person.model.Korisnici;
 import person.model.Misija;
+import person.model.MissionPlanetCombo;
 import person.model.Objekat;
 import person.model.utility.JDBCUtils;
 
@@ -18,11 +19,12 @@ public class Server {
 
     private final List<Objekat> objekti = new ArrayList<>();
 
-    private final List<Misija> misije = new ArrayList<>();
+    private final List<MissionPlanetCombo> misijeIPlanete = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
         this.setObjekti(JDBCUtils.selectObjekatFromZus());
+        this.setMisijeIPlanete(JDBCUtils.selectAllMissionsAndObjects());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -46,14 +48,16 @@ public class Server {
         this.objekti.addAll(objekti);
     }
 
-    private void setMisije(Collection<Misija> misije){
-        this.misije.clear();
-        this.misije.addAll(misije);
+    public List<MissionPlanetCombo> getMisijeIPlanete() {
+        return misijeIPlanete;
     }
 
-    public List<Misija> getMisije() {
-        return misije;
+    private void setMisijeIPlanete(Collection<MissionPlanetCombo> misijeIPlanete){
+        this.misijeIPlanete.clear();
+        this.misijeIPlanete.addAll(misijeIPlanete);
     }
+
+
 
 
 }

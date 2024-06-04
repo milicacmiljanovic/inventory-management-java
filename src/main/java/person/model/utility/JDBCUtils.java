@@ -1,8 +1,6 @@
 package person.model.utility;
 
-import person.model.Korisnici;
-import person.model.Objekat;
-import person.model.StambeniObjekat;
+import person.model.*;
 import person.model.base.*;
 
 import java.sql.*;
@@ -119,69 +117,126 @@ public class JDBCUtils {
 
 
     public static List<Korisnici> selectFromPerson(String firstName, String lastName, String yearOfBirth) {
-        List<Korisnici> oldPeople = selectAllFromZus();
-        Server.SERVER.setKorisnici(oldPeople);
-        List<Korisnici> people = new ArrayList<>();
-        for (Korisnici oldPerson : oldPeople) {
-            if (yearOfBirth == null || yearOfBirth.length() != 4) {
-                if (oldPerson.getIme().toLowerCase().contains(firstName.toLowerCase())
-                        && oldPerson.getPrezime().toLowerCase().contains(lastName.toLowerCase()))
-                    people.add(oldPerson);
-                continue;
-            }
-            if (oldPerson.getIme().toLowerCase().contains(firstName.toLowerCase())
-                    && oldPerson.getPrezime().toLowerCase().contains(lastName.toLowerCase())
-                    && oldPerson.getDatum_rodjenja().getYear() == Integer.parseInt(yearOfBirth))
-                people.add(oldPerson);
+        List<Korisnici> korisnici = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT * FROM zus.korisnici WHERE 1=1");
+
+        if (firstName != null && !firstName.isEmpty()) {
+            query.append(" AND ime LIKE ?");
         }
-        return people;
+        if (lastName != null && !lastName.isEmpty()) {
+            query.append(" AND prezime LIKE ?");
+        }
+        if (yearOfBirth != null && yearOfBirth.length() == 4) {
+            query.append(" AND YEAR(datum_rodjenja) = ?");
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
+            int index = 1;
+
+            if (firstName != null && !firstName.isEmpty()) {
+                preparedStatement.setString(index++, "%" + firstName + "%");
+            }
+            if (lastName != null && !lastName.isEmpty()) {
+                preparedStatement.setString(index++, "%" + lastName + "%");
+            }
+            if (yearOfBirth != null && yearOfBirth.length() == 4) {
+                preparedStatement.setInt(index, Integer.parseInt(yearOfBirth));
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int korisnikId = resultSet.getInt(1);
+                String ime = resultSet.getString(2);
+                String prezime = resultSet.getString(3);
+                LocalDate datumRodjenja = resultSet.getDate(6).toLocalDate();
+                Korisnici korisnik = new Korisnici(korisnikId, ime, prezime, datumRodjenja);
+                korisnici.add(korisnik);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return korisnici;
     }
 
 
     public static List<Objekat> selectFromPlanet(String nameFilter) {
-        List<Objekat> planets = selectObjekatFromZus(); // Assuming this method retrieves all planets
-        List<Objekat> filteredPlanets = new ArrayList<>();
+        List<Objekat> objekti = new ArrayList<>();
+        String query = "SELECT o.objekat_id, o.naziv, o.vrsta, COUNT(m.misija_id) AS broj_misija " +
+                "FROM zus.objekti o " +
+                "LEFT JOIN zus.misije m ON o.objekat_id = m.objekaat_id " +
+                "WHERE o.naziv LIKE ? " +
+                "GROUP BY o.objekat_id, o.naziv, o.vrsta";
 
-        for (Objekat planet : planets) {
-            if (planet.getNaziv().toLowerCase().contains(nameFilter.toLowerCase())) {
-                filteredPlanets.add(planet);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, "%" + nameFilter + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int objekat_id = resultSet.getInt("objekat_id");
+                String naziv = resultSet.getString("naziv");
+                String vrsta = resultSet.getString("vrsta");
+                int broj_misija = resultSet.getInt("broj_misija");
+                Objekat objekat = new Objekat(objekat_id, naziv, vrsta, broj_misija);
+                objekti.add(objekat);
             }
-        }
-
-        return filteredPlanets;
-    }
-
-
-    /*
-    * public static void insertIntoZus(Korisnici korisnik) {
-        //String query = "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja)" +
-        //        "values (?, ?, str_to_date(?, '%m/%d/%Y'))";
-        String query =  "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja) " +
-                "values (?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y'))" +
-                "from dual" +
-                "where not exists (" +
-                "select 1 from zus.korisnici where username = ?" +
-                ")";
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
-            statement.setString(1, korisnik.getIme());
-            statement.setString(2, korisnik.getPrezime());
-            statement.setString(3, korisnik.getUsername());
-            statement.setString(4, korisnik.getPassword());
-            statement.setString(5,
-                    korisnik.getDatum_rodjenja().getMonthValue() + "/" +
-                            korisnik.getDatum_rodjenja().getDayOfMonth() + "/" +
-                            korisnik.getDatum_rodjenja().getYear());
-            // obrisi posle
-            statement.setString(6, korisnik.getUsername());
-            statement.executeUpdate();
-            connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return objekti;
     }
-    * */
+
+
+    public static List<MissionPlanetCombo> selectAllMissionsAndObjects() {
+        List<MissionPlanetCombo> combinedList = new ArrayList<>();
+        String query = "SELECT " +
+                "o.objekat_id, o.naziv, o.vrsta, o.udaljenost_od_zvezde, o.najniza_temperatura, " +
+                "o.najvisa_temperatura, o.kiseonik, o.drugi_gas, o.kolicina_drugog_gasa, o.visina, " +
+                "o.brzina_orbitiranja, o.broj_umrlih, " +
+                "NULL AS misija_id, NULL AS naziv_misije, NULL AS datum_polaska, NULL AS datum_povratka " +
+                "FROM zus.objekti o " +
+                "UNION " +
+                "SELECT " +
+                "o.objekat_id, o.naziv, o.vrsta, o.udaljenost_od_zvezde, o.najniza_temperatura, " +
+                "o.najvisa_temperatura, o.kiseonik, o.drugi_gas, o.kolicina_drugog_gasa, o.visina, " +
+                "o.brzina_orbitiranja, o.broj_umrlih, " +
+                "m.misija_id, m.naziv_misije, m.datum_polaska, m.datum_povratka " +
+                "FROM zus.objekti o " +
+                "JOIN zus.misije m ON o.objekat_id = m.objekaat_id";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int objekat_id = resultSet.getInt("objekat_id");
+                String naziv = resultSet.getString("naziv");
+                String vrsta = resultSet.getString("vrsta");
+                int udaljenost_od_zvezde = resultSet.getInt("udaljenost_od_zvezde");
+                int najniza_temperatura = resultSet.getInt("najniza_temperatura");
+                int najvisa_temperatura = resultSet.getInt("najvisa_temperatura");
+                int kiseonik = resultSet.getInt("kiseonik");
+                String drugi_gas = resultSet.getString("drugi_gas");
+                int kolicina_drugog_gasa = resultSet.getInt("kolicina_drugog_gasa");
+                int visina = resultSet.getInt("visina");
+                int brzina_orbitiranja = resultSet.getInt("brzina_orbitiranja");
+                int broj_umrlih = resultSet.getInt("broj_umrlih");
+
+                Objekat objekat = new Objekat(objekat_id, naziv, vrsta, udaljenost_od_zvezde, najniza_temperatura, najvisa_temperatura, kiseonik, drugi_gas, kolicina_drugog_gasa, visina, brzina_orbitiranja, broj_umrlih);
+
+                int misija_id = resultSet.getInt("misija_id");
+                if (misija_id != 0) {
+                    String naziv_misije = resultSet.getString("naziv_misije");
+                    LocalDate datum_polaska = resultSet.getDate("datum_polaska").toLocalDate();
+                    LocalDate datum_povratka = resultSet.getDate("datum_povratka").toLocalDate();
+                    Misija misija = new Misija(misija_id, naziv_misije, datum_polaska, datum_povratka);
+                    combinedList.add(new MissionPlanetCombo(misija, objekat));
+                } else {
+                    combinedList.add(new MissionPlanetCombo(null, objekat));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return combinedList;
+    }
 
     public static void insertIntoZus(Korisnici korisnik) {
         String query = "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja) " +
