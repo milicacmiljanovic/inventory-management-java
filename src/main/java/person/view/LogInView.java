@@ -12,8 +12,6 @@ import javafx.stage.Stage;
 import person.model.base.DataBase;
 import person.model.utility.JDBCUtils;
 
-import java.time.LocalDate;
-
 
 public class LogInView extends Application{
 
@@ -128,7 +126,7 @@ public class LogInView extends Application{
 
     private void openObjectView(Stage primaryStage){
         JDBCUtils.connect();
-        primaryStage = new ObjectView();
+        primaryStage = new ObjectsView();
         primaryStage.show();
     }
 
