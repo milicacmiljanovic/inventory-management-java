@@ -45,23 +45,27 @@ public class JDBCUtils {
         }
         return korisnici;
     }
-    public static List<Objekat> selectObjekatFromZus(){
+    public static List<Objekat> selectObjekatFromZus() {
         List<Objekat> objekti = new ArrayList<>();
-        String query = "select objekat_id,naziv, vrsta from zus.objekti";
+        String query = "select o.objekat_id, o.naziv, o.vrsta, count(m.misija_id) as broj_misija " +
+                "from zus.objekti o " +
+                "left join zus.misije m on o.objekat_id = m.objekaat_id " +
+                "group by o.objekat_id, o.naziv, o.vrsta";
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                int objekat_id = resultSet.getInt(1);
-                String naziv = resultSet.getString(2);
-                String vrsta = resultSet.getString(3);
-                Objekat objekat = new Objekat(objekat_id,naziv, vrsta);
+                int objekat_id = resultSet.getInt("objekat_id");
+                String naziv = resultSet.getString("naziv");
+                String vrsta = resultSet.getString("vrsta");
+                int broj_misija = resultSet.getInt("broj_misija");
+                Objekat objekat = new Objekat(objekat_id, naziv, vrsta, broj_misija); // Assuming Objekat has a constructor that includes broj_misija
                 objekti.add(objekat);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-      return objekti;
+        return objekti;
     }
 
     public static List<Objekat> selectDetaljanObjekatFromZus(){
@@ -135,7 +139,7 @@ public class JDBCUtils {
 
 
     public static List<Objekat> selectFromPlanet(String nameFilter) {
-        List<Objekat> planets = selectDetaljanObjekatFromZus(); // Assuming this method retrieves all planets
+        List<Objekat> planets = selectObjekatFromZus(); // Assuming this method retrieves all planets
         List<Objekat> filteredPlanets = new ArrayList<>();
 
         for (Objekat planet : planets) {
