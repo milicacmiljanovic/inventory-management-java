@@ -14,11 +14,13 @@ public class Objekat {
     private int visina;
     private int brzina_orbitiranja;
     private int broj_umrlih;
+    private int broj_misija;
 
-    public Objekat(int objekat_id, String naziv, String vrsta) {
+    public Objekat(int objekat_id, String naziv, String vrsta, int broj_misija) {
         this.objekat_id = objekat_id;
         this.naziv = naziv;
         this.vrsta = vrsta;
+        this.broj_misija = broj_misija;
     }
 
     public Objekat(int objekat_id, String naziv, String vrsta, int udaljenost_od_zvezde, int najniza_temperatura, int najvisa_temperatura, int kiseonik, String drugi_gas, int kolicina_drugog_gasa, int visina, int brzina_orbitiranja, int broj_umrlih) {
@@ -126,5 +128,13 @@ public class Objekat {
 
     public void setBroj_umrlih(int broj_umrlih) {
         this.broj_umrlih = broj_umrlih;
+    }
+
+    public int getBroj_misija() {
+        return broj_misija;
+    }
+
+    public void setBroj_misija(int broj_misija) {
+        this.broj_misija = broj_misija;
     }
 }

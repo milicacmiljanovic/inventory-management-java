@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import person.controller.FilterControlObject;
+import person.model.Misija;
 import person.model.Objekat;
 import person.model.base.Server;
 
@@ -16,7 +17,9 @@ public class ObjectView extends Stage {
 
     private final BorderPane root = new BorderPane();
 
-    private final TableView<Objekat> tvObjects = new ObjectTable(Server.SERVER.getObjekti());
+    private final TableView<Objekat> tvObjects = new ObjectsTable(Server.SERVER.getObjekti());
+
+    //private final TableView<Misija> tvMissions = new TableView<>(Server.SERVER.getMisije());
 
     private final TextField tfPlanetNameFilter = new TextField();
     private final Button btFilterObj = new Button("Filter");
@@ -33,9 +36,11 @@ public class ObjectView extends Stage {
         this.btFilterObj.setOnAction(new FilterControlObject(this.tfPlanetNameFilter, this.tvObjects));
 
         //NAJBITNIJE OVDE
-        this.root.setCenter(this.tvObjects);
+        this.root.setLeft(this.tvObjects);
         this.root.setTop(this.filterBox());
-        this.root.setRight(this.addBox());
+        this.root.setCenter(this.addBox());
+        this.root.setPadding(new Insets(10));
+        //this.root.setRight(this.tvMissions);
 
         super.setScene(new Scene(this.root));
     }
@@ -58,5 +63,7 @@ public class ObjectView extends Stage {
         gridPane.setAlignment(Pos.CENTER);
         return gridPane;
     }
+
+
 
 }
