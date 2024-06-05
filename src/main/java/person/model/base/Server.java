@@ -1,9 +1,6 @@
 package person.model.base;
 
-import person.model.Korisnici;
-import person.model.Misija;
-import person.model.MissionPlanetCombo;
-import person.model.Objekat;
+import person.model.*;
 import person.model.utility.JDBCUtils;
 
 import java.util.ArrayList;
@@ -21,12 +18,14 @@ public class Server {
 
     private final List<MissionPlanetCombo> misijeIPlanete = new ArrayList<>();
     private final List<MissionPlanetCombo> misijeIPlaneteInh = new ArrayList<>();
+    private final List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
         this.setObjekti(JDBCUtils.selectObjekatFromZus());
         this.setMisijeIPlanete(JDBCUtils.selectAllMissionsAndObjects());
         this.setMisijeIPlaneteInh(JDBCUtils.selectHabitableMissionsAndObjects());
+        this.setStambeniObjekti(JDBCUtils.selectStambeniObjekatFromZus());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -68,6 +67,13 @@ public class Server {
         this.misijeIPlaneteInh.addAll(misijeIPlaneteInh);
     }
 
+    public List<StambeniObjekat> getStambeniObjekti() {
+        return stambeniObjekti;
+    }
 
+    private void setStambeniObjekti(Collection<StambeniObjekat> stambeniObjekti){
+        this.stambeniObjekti.clear();
+        this.stambeniObjekti.addAll(stambeniObjekti);
+    }
 
 }
