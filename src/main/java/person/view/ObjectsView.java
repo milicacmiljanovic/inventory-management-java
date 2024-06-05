@@ -1,18 +1,24 @@
 package person.view;
 
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import person.controller.FilterControlObject;
+import person.controller.FilterHabitableObjects;
 import person.model.Misija;
 import person.model.MissionPlanetCombo;
 import person.model.Objekat;
 import person.model.base.Server;
+import person.model.utility.JDBCUtils;
+
+import java.util.List;
 
 public class ObjectsView extends Stage {
 
@@ -22,6 +28,8 @@ public class ObjectsView extends Stage {
 
     private final TableView<MissionPlanetCombo> tvMissionsAndPlanets = new MissionsTable(Server.SERVER.getMisijeIPlanete());
 
+    private final TableView<MissionPlanetCombo> tvMissionsAndPlanetsInh = new MissionsTable(Server.SERVER.getMisijeIPlaneteInh());
+
     private final TextField tfPlanetNameFilter = new TextField();
     private final Button btFilterObj = new Button("Filter");
 
@@ -30,11 +38,15 @@ public class ObjectsView extends Stage {
     //private final DatePicker dpDateOfBirth = new DatePicker(
       //      LocalDate.now().minusYears(20));
     private final Button btAdd = new Button("Add new person");
+    private final Button btFilterInh = new Button("Inhabitable Objects");
 
     public ObjectsView() {
         super.setTitle("PlanetView");
 
         this.btFilterObj.setOnAction(new FilterControlObject(this.tfPlanetNameFilter, this.tvObjects));
+        this.btFilterInh.setOnAction(event -> filterHabitableObjects());
+        //tvObjects.setOnMouseClicked(event -> handleObjectDoubleClick(event));
+
 
         //NAJBITNIJE OVDE
         this.root.setLeft(this.tvObjects);
@@ -52,7 +64,7 @@ public class ObjectsView extends Stage {
 
     private HBox filterBox() {
         HBox hbox = new HBox(10, new Label("PlanetName:"), this.tfPlanetNameFilter,
-                this.btFilterObj);
+                this.btFilterObj, this.btFilterInh);
         hbox.setPadding(new Insets(10));
         hbox.setAlignment(Pos.CENTER);
         return hbox;
@@ -69,6 +81,25 @@ public class ObjectsView extends Stage {
         return gridPane;
     }
 
-
+    private void filterHabitableObjects() {
+        List<MissionPlanetCombo> habitablePlanets = JDBCUtils.selectHabitableMissionsAndObjects();
+        this.tvMissionsAndPlanetsInh.setItems(FXCollections.observableArrayList(habitablePlanets));
+        this.root.setRight(this.tvMissionsAndPlanetsInh);
+    }
+/*
+    private void handleObjectDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // Check for double-click
+            Objekat selectedObjekat = tvObjects.getSelectionModel().getSelectedItem();
+            if (selectedObjekat != null) {
+                // Extract relevant information from selected Objekat
+                int objekatId = selectedObjekat.getObjekatId();
+                String objekatName = selectedObjekat.getNaziv();
+                // Create and show BuildingView stage
+                BuildingView buildingView = new BuildingView(objekatId, objekatName);
+                buildingView.show();
+            }
+        }
+    }
+   */
 
 }
