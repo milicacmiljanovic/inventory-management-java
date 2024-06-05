@@ -3,6 +3,7 @@ package person.model.base;
 import person.model.*;
 import person.model.utility.JDBCUtils;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +30,7 @@ public class Server {
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
-         }
+    }
 
     public List<Korisnici> getKorisnici() {
         return korisnici;

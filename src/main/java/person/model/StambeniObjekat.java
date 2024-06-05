@@ -6,6 +6,7 @@ public class StambeniObjekat {
     private int kvadratura;
     private int brojStanara;
     private boolean dostupnost = true;
+    private int objekat_id;
 
     public StambeniObjekat(int stambeniObjekatId, String vrstaStambenogObjekta, int kvadratura, int brojStanara, boolean dostupnost) {
         this.stambeniObjekatId = stambeniObjekatId;
@@ -13,6 +14,15 @@ public class StambeniObjekat {
         this.kvadratura = kvadratura;
         this.brojStanara = brojStanara;
         this.dostupnost = dostupnost;
+    }
+
+    public StambeniObjekat(int stambeniObjekatId, String vrstaStambenogObjekta, int kvadratura, int brojStanara, boolean dostupnost, int objekat_id) {
+        this.stambeniObjekatId = stambeniObjekatId;
+        this.vrstaStambenogObjekta = vrstaStambenogObjekta;
+        this.kvadratura = kvadratura;
+        this.brojStanara = brojStanara;
+        this.dostupnost = dostupnost;
+        this.objekat_id = objekat_id;
     }
 
     public int getStambeniObjekatId() {
@@ -49,5 +59,17 @@ public class StambeniObjekat {
 
     public void setDostupnost(boolean dostupnost) {
         this.dostupnost = dostupnost;
+    }
+
+    public String getVrstaStambenogObjekta() {
+        return vrstaStambenogObjekta;
+    }
+
+    public int getObjekat_id() {
+        return objekat_id;
+    }
+
+    public void setObjekat_id(int objekat_id) {
+        this.objekat_id = objekat_id;
     }
 }

@@ -5,8 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import person.controller.FilterControlObject;
-import person.model.Objekat;
 import person.model.StambeniObjekat;
 import person.model.base.Server;
 
