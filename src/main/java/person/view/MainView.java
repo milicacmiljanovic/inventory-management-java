@@ -36,7 +36,7 @@ public class MainView extends Stage {
         super.setTitle("ZUS");
 
         this.btFilter.setOnAction(new FilterControl(this.tfFirstNameFilter, this.tfLastNameFilter, this.tfYearFilter, this.tvPeople));
-        this.btAdd.setOnAction(new AddControl(this.tfFirstName, this.tfLastName, this.dpDateOfBirth, this.tvPeople));
+        //this.btAdd.setOnAction(new AddControl(this.tfFirstName, this.tfLastName, this.dpDateOfBirth, this.tvPeople));
 
         this.root.setCenter(this.tvPeople);
         this.root.setTop(this.filterBox());

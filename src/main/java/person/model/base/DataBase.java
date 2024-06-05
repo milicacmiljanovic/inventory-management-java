@@ -4,7 +4,7 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class DataBase {
-    private final String url = "jdbc:mysql://localhost:3307/zus";
+    private final String url = "jdbc:mysql://localhost:3306/zus";
     private final String user = "root";
     private final String password = "";
 

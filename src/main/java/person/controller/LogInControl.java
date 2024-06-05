@@ -2,15 +2,9 @@ package person.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
-import java.sql.*;
-import java.time.LocalDate;
+import person.model.utility.JDBCUtils;
+import person.view.ObjectsView;
 
 
 public class LogInControl implements EventHandler<ActionEvent> {
@@ -30,6 +24,7 @@ public class LogInControl implements EventHandler<ActionEvent> {
 
         if (authenticate(username, password)) {
             System.out.println("Login successful for user: " + username);
+            openObjectView();
         } else {
             System.out.println("Login failed for user: " + username);
         }
@@ -41,4 +36,11 @@ public class LogInControl implements EventHandler<ActionEvent> {
     private boolean authenticate(String username, String password) {
         return "user".equals(username) && "password".equals(password);
     }
+
+    private void openObjectView() {
+        JDBCUtils.connect();
+        ObjectsView objectsView = new ObjectsView();
+        objectsView.show();
+    }
+
 }

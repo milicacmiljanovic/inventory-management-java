@@ -1,11 +1,15 @@
 package person.model.base;
 
 import person.model.Korisnici;
+import person.model.Misija;
+import person.model.MissionPlanetCombo;
+import person.model.Objekat;
 import person.model.utility.JDBCUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 public class Server {
 
@@ -13,8 +17,17 @@ public class Server {
 
     private final List<Korisnici> korisnici = new ArrayList<>();
 
+    private final List<Objekat> objekti = new ArrayList<>();
+
+    private final List<MissionPlanetCombo> misijeIPlanete = new ArrayList<>();
+
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
+        this.setObjekti(JDBCUtils.selectObjekatFromZus());
+        this.setMisijeIPlanete(JDBCUtils.selectAllMissionsAndObjects());
+
+        //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
+        //this.setMisije(JDBCUtils.);
          }
 
     public List<Korisnici> getKorisnici() {
@@ -25,5 +38,26 @@ public class Server {
         this.korisnici.clear();
         this.korisnici.addAll(korisnici);
     }
+
+    public List<Objekat> getObjekti() {
+        return objekti;
+    }
+
+    public void setObjekti(Collection<Objekat> objekti) {
+        this.objekti.clear();
+        this.objekti.addAll(objekti);
+    }
+
+    public List<MissionPlanetCombo> getMisijeIPlanete() {
+        return misijeIPlanete;
+    }
+
+    private void setMisijeIPlanete(Collection<MissionPlanetCombo> misijeIPlanete){
+        this.misijeIPlanete.clear();
+        this.misijeIPlanete.addAll(misijeIPlanete);
+    }
+
+
+
 
 }

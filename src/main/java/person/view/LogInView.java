@@ -12,8 +12,6 @@ import javafx.stage.Stage;
 import person.model.base.DataBase;
 import person.model.utility.JDBCUtils;
 
-import java.time.LocalDate;
-
 
 public class LogInView extends Application{
 
@@ -76,7 +74,7 @@ public class LogInView extends Application{
 
     private void handleLogin(String username, String password, Stage primaryStage) {
         if (databaseService.validateUser(username, password)) {
-            openMainView(primaryStage);
+            openObjectView(primaryStage);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Error");
@@ -115,14 +113,20 @@ public class LogInView extends Application{
             openRegisterView(primaryStage);
     }
 
-    private void openMainView(Stage primaryStage) {
-        JDBCUtils.connect();
-        primaryStage = new MainView();
-        primaryStage.show();
+    private void handleObject(Stage primaryStage){
+        openObjectView(primaryStage);
     }
+
+    // OVA METODA MOZE CELA DA SE OBRISE SAD
     private void openRegisterView(Stage primaryStage){
         JDBCUtils.connect();
         primaryStage = new RegisterView();
+        primaryStage.show();
+    }
+
+    private void openObjectView(Stage primaryStage){
+        JDBCUtils.connect();
+        primaryStage = new ObjectsView();
         primaryStage.show();
     }
 
