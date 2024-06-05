@@ -72,7 +72,7 @@ public class Server {
         return stambeniObjekti;
     }
 
-    private void setStambeniObjekti(Collection<StambeniObjekat> stambeniObjekti){
+    public void setStambeniObjekti(Collection<StambeniObjekat> stambeniObjekti){
         this.stambeniObjekti.clear();
         this.stambeniObjekti.addAll(stambeniObjekti);
     }

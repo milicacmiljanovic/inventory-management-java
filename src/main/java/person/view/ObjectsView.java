@@ -1,23 +1,18 @@
 package person.view;
 
-import com.google.protobuf.Value;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import person.controller.FilterControlObject;
-import person.controller.FilterHabitableObjects;
-import person.model.Misija;
+import person.controller.ShowAction;
 import person.model.MissionPlanetCombo;
 import person.model.Objekat;
-import person.model.StambeniObjekat;
 import person.model.base.Server;
 import person.model.utility.JDBCUtils;
 
@@ -45,13 +40,13 @@ public class ObjectsView extends Stage {
 
         this.btFilterObj.setOnAction(new FilterControlObject(this.tfPlanetNameFilter, this.tvObjects));
         this.btFilterInh.setOnAction(event -> filterHabitableObjects());
-        this.btBuy1.setOnAction(event -> handleBuy());
+
+        this.btBuy1.setOnAction(new ShowAction(tvMissionsAndPlanetsInh));
 
         this.btFilterInh.setOnAction(event -> {
             filterHabitableObjects();
             resetBuyButton(); // Reset btBuy1 button
         });
-        this.btBuy1.setOnAction(event -> handleBuy());
 
         // Add selection listener to enable/disable btBuy1 based on the selected table
         this.tvMissionsAndPlanets.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -112,11 +107,6 @@ public class ObjectsView extends Stage {
         List<MissionPlanetCombo> habitablePlanets = JDBCUtils.selectHabitableMissionsAndObjects();
         this.tvMissionsAndPlanetsInh.setItems(FXCollections.observableArrayList(habitablePlanets));
         this.root.setRight(this.tvMissionsAndPlanetsInh);
-    }
-
-    private void handleBuy() {
-        BuildingView buildingView = new BuildingView(); // Create an instance of BuildingView
-        buildingView.show(); // Show the BuildingView stage
     }
 
     private void resetBuyButton() {

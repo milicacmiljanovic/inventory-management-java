@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import person.model.base.DataBase;
 import person.model.utility.JDBCUtils;
 
+import java.time.LocalDate;
+
 
 public class LogInView extends Application{
 
@@ -110,7 +112,7 @@ public class LogInView extends Application{
     }
      */
     private void handleRegister(Stage primaryStage) {
-            openRegisterView(primaryStage);
+        openRegisterView(primaryStage);
     }
 
     private void handleObject(Stage primaryStage){
