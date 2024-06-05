@@ -1,40 +1,45 @@
 package person.model;
 
 public class StambeniObjekat {
-    private final int stambeniObjekatId;
-    private String vrstaStambenogObjekta;
+    private int stambeni_objekat_id;
+    private String vrsta_stambenog_objekta;
     private int kvadratura;
-    private int brojStanara;
-    private boolean dostupnost = true;
-    private int objekat_id;
+    private int broj_stanara;
+    private boolean dostupnost;
+    private int objekkat_id;
 
-    public StambeniObjekat(int stambeniObjekatId, String vrstaStambenogObjekta, int kvadratura, int brojStanara, boolean dostupnost) {
-        this.stambeniObjekatId = stambeniObjekatId;
-        this.vrstaStambenogObjekta = vrstaStambenogObjekta;
+    // Constructor, getters, setters
+    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost) {
+        this.stambeni_objekat_id = stambeni_objekat_id;
+        this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
         this.kvadratura = kvadratura;
-        this.brojStanara = brojStanara;
+        this.broj_stanara = broj_stanara;
         this.dostupnost = dostupnost;
     }
 
-    public StambeniObjekat(int stambeniObjekatId, String vrstaStambenogObjekta, int kvadratura, int brojStanara, boolean dostupnost, int objekat_id) {
-        this.stambeniObjekatId = stambeniObjekatId;
-        this.vrstaStambenogObjekta = vrstaStambenogObjekta;
+    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost, int objekkat_id) {
+        this.stambeni_objekat_id = stambeni_objekat_id;
+        this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
         this.kvadratura = kvadratura;
-        this.brojStanara = brojStanara;
+        this.broj_stanara = broj_stanara;
         this.dostupnost = dostupnost;
-        this.objekat_id = objekat_id;
+        this.objekkat_id = objekkat_id;
     }
 
-    public int getStambeniObjekatId() {
-        return stambeniObjekatId;
+    public int getStambeni_objekat_id() {
+        return stambeni_objekat_id;
+    }
+
+    public void setStambeni_objekat_id(int stambeni_objekat_id) {
+        this.stambeni_objekat_id = stambeni_objekat_id;
     }
 
     public String getVrsta_stambenog_objekta() {
-        return vrstaStambenogObjekta;
+        return vrsta_stambenog_objekta;
     }
 
-    public void setVrstaStambenogObjekta(String vrstaStambenogObjekta) {
-        this.vrstaStambenogObjekta = vrstaStambenogObjekta;
+    public void setVrsta_stambenog_objekta(String vrsta_stambenog_objekta) {
+        this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
     }
 
     public int getKvadratura() {
@@ -45,12 +50,12 @@ public class StambeniObjekat {
         this.kvadratura = kvadratura;
     }
 
-    public int getBrojStanara() {
-        return brojStanara;
+    public int getBroj_stanara() {
+        return broj_stanara;
     }
 
-    public void setBrojStanara(int broj_stanara) {
-        this.brojStanara = brojStanara;
+    public void setBroj_stanara(int broj_stanara) {
+        this.broj_stanara = broj_stanara;
     }
 
     public boolean isDostupnost() {
@@ -59,17 +64,5 @@ public class StambeniObjekat {
 
     public void setDostupnost(boolean dostupnost) {
         this.dostupnost = dostupnost;
-    }
-
-    public String getVrstaStambenogObjekta() {
-        return vrstaStambenogObjekta;
-    }
-
-    public int getObjekat_id() {
-        return objekat_id;
-    }
-
-    public void setObjekat_id(int objekat_id) {
-        this.objekat_id = objekat_id;
     }
 }

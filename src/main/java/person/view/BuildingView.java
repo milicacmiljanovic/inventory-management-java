@@ -13,7 +13,7 @@ public class BuildingView extends Stage {
     private final BorderPane root = new BorderPane();
     private final TableView<StambeniObjekat> tvBuildingObject = new BuildingTable(Server.SERVER.getStambeniObjekti());
 
-    public BuildingView() {
+    public BuildingView(TableView<StambeniObjekat> tvBuildingObject) {
         super.setTitle("BuildingView");
 
 

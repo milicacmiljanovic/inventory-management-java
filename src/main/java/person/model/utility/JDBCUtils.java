@@ -1,5 +1,7 @@
 package person.model.utility;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import person.model.*;
 
 import java.sql.*;
@@ -22,6 +24,32 @@ public class JDBCUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static ObservableList<StambeniObjekat> prikazStambeniObjekat(int objekat_id){
+        String query = "select * from stambeni_objekti s where s.objekkat_id = " + objekat_id;
+        ObservableList<StambeniObjekat> stambeniObjekti = FXCollections.observableArrayList();
+        try{
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            StambeniObjekat s;
+            while (resultSet.next()){
+                int stambeni_objekat_id = resultSet.getInt(1);
+                String vrsta_stambenog_objekta = resultSet.getString(2);
+                int kvadratura = resultSet.getInt(3);
+                int broj_Stanara = resultSet.getInt(4);
+                boolean dostupnost = resultSet.getBoolean(5);
+                int objekkat_id = resultSet.getInt(6);
+                s = new StambeniObjekat(stambeni_objekat_id,vrsta_stambenog_objekta, kvadratura, broj_Stanara, dostupnost, objekkat_id);
+                stambeniObjekti.add(s);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return stambeniObjekti;
+    }
+
 
     public static List<Korisnici> selectAllFromZus() {
         List<Korisnici> korisnici = new ArrayList<>();
@@ -100,12 +128,12 @@ public class JDBCUtils {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                int stambeniObjekatId = resultSet.getInt(1);
-                String vrstaStambenogObjekta = resultSet.getString(2);
+                int stambeni_objekat_id = resultSet.getInt(1);
+                String vrsta_stambenog_objekta = resultSet.getString(2);
                 int kvadratura = resultSet.getInt(3);
-                int brojStanara = resultSet.getInt(4);
-                boolean dostuonost = resultSet.getBoolean(5);
-                StambeniObjekat stambeni = new StambeniObjekat(stambeniObjekatId, vrstaStambenogObjekta, kvadratura, brojStanara, dostuonost);
+                int broj_stanara = resultSet.getInt(4);
+                boolean dostupnost = resultSet.getBoolean(5);
+                StambeniObjekat stambeni = new StambeniObjekat(stambeni_objekat_id,vrsta_stambenog_objekta,kvadratura, broj_stanara, dostupnost);
                 stambeniObjekti.add(stambeni);
             }
         } catch (SQLException e) {
@@ -113,7 +141,7 @@ public class JDBCUtils {
         }
         return stambeniObjekti;
     }
-
+/*
     public static List<StambeniObjekat> selectStambeniObjekatByObjekatId(int objekatId) {
         List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
         String query = "SELECT * FROM zus.stambeni_objekti WHERE objekat_id = ?";
@@ -135,6 +163,8 @@ public class JDBCUtils {
         }
         return stambeniObjekti;
     }
+
+ */
     public static List<Korisnici> selectFromPerson(String firstName, String lastName, String yearOfBirth) {
         List<Korisnici> korisnici = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT * FROM zus.korisnici WHERE 1=1");

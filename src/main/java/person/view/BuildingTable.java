@@ -27,11 +27,15 @@ public class BuildingTable extends TableView<StambeniObjekat> {
         tcNumOfPeople.setCellValueFactory(new PropertyValueFactory<>("broj_stanara"));
         tcAvailability.setCellValueFactory(new PropertyValueFactory<>("dostupnost"));
 
+        super.getColumns().addAll(tcBuildingId,tcType,tcSize,tcNumOfPeople,tcAvailability);
+        /*
         super.getColumns().add(tcBuildingId);
         super.getColumns().add(tcType);
         super.getColumns().add(tcSize);
         super.getColumns().add(tcNumOfPeople);
         super.getColumns().add(tcAvailability);
+        */
+
     }
 
 }
