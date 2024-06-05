@@ -114,7 +114,27 @@ public class JDBCUtils {
         return stambeniObjekti;
     }
 
-
+    public static List<StambeniObjekat> selectStambeniObjekatByObjekatId(int objekatId) {
+        List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
+        String query = "SELECT * FROM zus.stambeni_objekti WHERE objekat_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, objekatId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int stambeniObjekatId = resultSet.getInt("stambeni_objekat_id");
+                    String vrstaStambenogObjekta = resultSet.getString("vrsta_stambenog_objekta");
+                    int kvadratura = resultSet.getInt("kvadratura");
+                    int brojStanara = resultSet.getInt("broj_stanara");
+                    boolean dostupnost = resultSet.getBoolean("dostupnost");
+                    StambeniObjekat stambeni = new StambeniObjekat(stambeniObjekatId, vrstaStambenogObjekta, kvadratura, brojStanara, dostupnost, objekatId);
+                    stambeniObjekti.add(stambeni);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return stambeniObjekti;
+    }
     public static List<Korisnici> selectFromPerson(String firstName, String lastName, String yearOfBirth) {
         List<Korisnici> korisnici = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT * FROM zus.korisnici WHERE 1=1");
