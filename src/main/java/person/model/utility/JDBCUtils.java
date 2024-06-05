@@ -1,7 +1,6 @@
 package person.model.utility;
 
 import person.model.*;
-import person.model.base.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -191,13 +190,6 @@ public class JDBCUtils {
                 "o.objekat_id, o.naziv, o.vrsta, o.udaljenost_od_zvezde, o.najniza_temperatura, " +
                 "o.najvisa_temperatura, o.kiseonik, o.drugi_gas, o.kolicina_drugog_gasa, o.visina, " +
                 "o.brzina_orbitiranja, o.broj_umrlih, " +
-                "NULL AS misija_id, NULL AS naziv_misije, NULL AS datum_polaska, NULL AS datum_povratka " +
-                "FROM zus.objekti o " +
-                "UNION " +
-                "SELECT " +
-                "o.objekat_id, o.naziv, o.vrsta, o.udaljenost_od_zvezde, o.najniza_temperatura, " +
-                "o.najvisa_temperatura, o.kiseonik, o.drugi_gas, o.kolicina_drugog_gasa, o.visina, " +
-                "o.brzina_orbitiranja, o.broj_umrlih, " +
                 "m.misija_id, m.naziv_misije, m.datum_polaska, m.datum_povratka " +
                 "FROM zus.objekti o " +
                 "JOIN zus.misije m ON o.objekat_id = m.objekaat_id";
@@ -222,15 +214,63 @@ public class JDBCUtils {
                 Objekat objekat = new Objekat(objekat_id, naziv, vrsta, udaljenost_od_zvezde, najniza_temperatura, najvisa_temperatura, kiseonik, drugi_gas, kolicina_drugog_gasa, visina, brzina_orbitiranja, broj_umrlih);
 
                 int misija_id = resultSet.getInt("misija_id");
-                if (misija_id != 0) {
-                    String naziv_misije = resultSet.getString("naziv_misije");
-                    LocalDate datum_polaska = resultSet.getDate("datum_polaska").toLocalDate();
-                    LocalDate datum_povratka = resultSet.getDate("datum_povratka").toLocalDate();
-                    Misija misija = new Misija(misija_id, naziv_misije, datum_polaska, datum_povratka);
-                    combinedList.add(new MissionPlanetCombo(misija, objekat));
-                } else {
-                    combinedList.add(new MissionPlanetCombo(null, objekat));
-                }
+                String naziv_misije = resultSet.getString("naziv_misije");
+                LocalDate datum_polaska = resultSet.getDate("datum_polaska").toLocalDate();
+                LocalDate datum_povratka = resultSet.getDate("datum_povratka").toLocalDate();
+                Misija misija = new Misija(misija_id, naziv_misije, datum_polaska, datum_povratka);
+                combinedList.add(new MissionPlanetCombo(misija, objekat));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return combinedList;
+    }
+
+    public static List<MissionPlanetCombo> selectHabitableMissionsAndObjects() {
+        List<MissionPlanetCombo> combinedList = new ArrayList<>();
+        String query = "SELECT " +
+                "o.objekat_id, o.naziv, o.vrsta, o.udaljenost_od_zvezde, o.najniza_temperatura, " +
+                "o.najvisa_temperatura, o.kiseonik, o.drugi_gas, o.kolicina_drugog_gasa, o.visina, " +
+                "o.brzina_orbitiranja, o.broj_umrlih, " +
+                "m.misija_id, m.naziv_misije, m.datum_polaska, m.datum_povratka " +
+                "FROM zus.objekti o " +
+                "JOIN zus.misije m ON o.objekat_id = m.objekaat_id " +
+                "WHERE " +
+                "o.udaljenost_od_zvezde BETWEEN 100000000 AND 200000000 " +
+                "AND o.najniza_temperatura BETWEEN 150 AND 250 " +
+                "AND o.najvisa_temperatura BETWEEN 250 AND 350 " +
+                "AND (o.najvisa_temperatura - o.najniza_temperatura) <= 120 " +
+                "AND o.kiseonik BETWEEN 15 AND 25 " +
+                "AND (o.kiseonik + o.kolicina_drugog_gasa) BETWEEN 90 AND 99.99 " +
+                "AND o.visina >= 1 " +
+                "AND o.brzina_orbitiranja BETWEEN 25 AND 35 " +
+                "AND o.broj_umrlih <= 20";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                int objekat_id = resultSet.getInt("objekat_id");
+                String naziv = resultSet.getString("naziv");
+                String vrsta = resultSet.getString("vrsta");
+                int udaljenost_od_zvezde = resultSet.getInt("udaljenost_od_zvezde");
+                int najniza_temperatura = resultSet.getInt("najniza_temperatura");
+                int najvisa_temperatura = resultSet.getInt("najvisa_temperatura");
+                double kiseonik = resultSet.getDouble("kiseonik"); // Changed to double
+                String drugi_gas = resultSet.getString("drugi_gas");
+                double kolicina_drugog_gasa = resultSet.getDouble("kolicina_drugog_gasa");
+                int visina = resultSet.getInt("visina");
+                int brzina_orbitiranja = resultSet.getInt("brzina_orbitiranja");
+                int broj_umrlih = resultSet.getInt("broj_umrlih");
+
+                Objekat objekat = new Objekat(objekat_id, naziv, vrsta, udaljenost_od_zvezde, najniza_temperatura, najvisa_temperatura, (int) kiseonik, drugi_gas, (int) kolicina_drugog_gasa, visina, brzina_orbitiranja, broj_umrlih);
+
+                int misija_id = resultSet.getInt("misija_id");
+                String naziv_misije = resultSet.getString("naziv_misije");
+                LocalDate datum_polaska = resultSet.getDate("datum_polaska").toLocalDate();
+                LocalDate datum_povratka = resultSet.getDate("datum_povratka").toLocalDate();
+                Misija misija = new Misija(misija_id, naziv_misije, datum_polaska, datum_povratka);
+                combinedList.add(new MissionPlanetCombo(misija, objekat));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -254,7 +294,7 @@ public class JDBCUtils {
             statement.setString(5, korisnik.getDatum_rodjenja().getMonthValue() + "/" +
                     korisnik.getDatum_rodjenja().getDayOfMonth() + "/" +
                     korisnik.getDatum_rodjenja().getYear());
-            statement.setString(6, korisnik.getUsername()); // For the NOT EXISTS clause
+            statement.setString(6, korisnik.getUsername());
 
             int rowsAffected = statement.executeUpdate();
             connection.commit();
@@ -282,7 +322,7 @@ public class JDBCUtils {
             if (resultSet.next()) {
                 return resultSet.getInt(1) + 1;
             } else {
-                return 1; // If the table is empty, start with 1
+                return 1;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving next korisnik_id", e);

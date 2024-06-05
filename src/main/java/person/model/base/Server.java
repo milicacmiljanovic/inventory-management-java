@@ -20,11 +20,13 @@ public class Server {
     private final List<Objekat> objekti = new ArrayList<>();
 
     private final List<MissionPlanetCombo> misijeIPlanete = new ArrayList<>();
+    private final List<MissionPlanetCombo> misijeIPlaneteInh = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
         this.setObjekti(JDBCUtils.selectObjekatFromZus());
         this.setMisijeIPlanete(JDBCUtils.selectAllMissionsAndObjects());
+        this.setMisijeIPlaneteInh(JDBCUtils.selectHabitableMissionsAndObjects());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -57,6 +59,14 @@ public class Server {
         this.misijeIPlanete.addAll(misijeIPlanete);
     }
 
+    public List<MissionPlanetCombo> getMisijeIPlaneteInh() {
+        return misijeIPlaneteInh;
+    }
+
+    private void setMisijeIPlaneteInh(Collection<MissionPlanetCombo> misijeIPlaneteInh){
+        this.misijeIPlaneteInh.clear();
+        this.misijeIPlaneteInh.addAll(misijeIPlaneteInh);
+    }
 
 
 
