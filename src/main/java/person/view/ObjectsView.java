@@ -45,7 +45,7 @@ public class ObjectsView extends Stage {
 
         this.btFilterObj.setOnAction(new FilterControlObject(this.tfPlanetNameFilter, this.tvObjects));
         this.btFilterInh.setOnAction(event -> filterHabitableObjects());
-        //tvObjects.setOnMouseClicked(event -> handleObjectDoubleClick(event));
+        tvObjects.setOnMouseClicked(event -> handleObjectDoubleClick(event));
 
 
         //NAJBITNIJE OVDE
@@ -86,20 +86,20 @@ public class ObjectsView extends Stage {
         this.tvMissionsAndPlanetsInh.setItems(FXCollections.observableArrayList(habitablePlanets));
         this.root.setRight(this.tvMissionsAndPlanetsInh);
     }
-/*
+
     private void handleObjectDoubleClick(MouseEvent event) {
         if (event.getClickCount() == 2) { // Check for double-click
-            Objekat selectedObjekat = tvObjects.getSelectionModel().getSelectedItem();
+            Objekat selectedObjekat = tvMissionsAndPlanetsInh.getSelectionModel().getSelectedItem().getObjekat();
             if (selectedObjekat != null) {
                 // Extract relevant information from selected Objekat
-                int objekatId = selectedObjekat.getObjekatId();
+                int objekatId = selectedObjekat.getObjekat_id();
                 String objekatName = selectedObjekat.getNaziv();
                 // Create and show BuildingView stage
-                BuildingView buildingView = new BuildingView(objekatId, objekatName);
+                BuildingView buildingView = new BuildingView();
                 buildingView.show();
             }
         }
     }
-   */
+
 
 }
