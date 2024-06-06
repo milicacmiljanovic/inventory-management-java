@@ -1,10 +1,12 @@
 package person.view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import person.model.FlightPlaneCombo;
 import person.model.StambeniObjekat;
@@ -15,10 +17,10 @@ public class BuildingView extends Stage {
     private final BorderPane root = new BorderPane();
     private final TableView<StambeniObjekat> tvBuildingObject = new BuildingTable(Server.SERVER.getStambeniObjekti());
     private final TableView<FlightPlaneCombo> tvFlightPlaneCombo = new FlighTable(Server.SERVER.getFlightPlaneCombos());
-    private final TextField tfime = new TextField("Name");
-    private final TextField tflastName = new TextField("Last Name");
+    private final TextField tfime = new TextField();
+    private final TextField tflastName = new TextField();
     private final DatePicker tfgodine = new DatePicker();
-    private final Button btnBuy = new Button();
+    private final Button btnBuy = new Button("Buy");
 
 
     public BuildingView(TableView<StambeniObjekat> tvBuildingObject, TableView<FlightPlaneCombo> tvFlightPlaneCombo) {
@@ -27,6 +29,7 @@ public class BuildingView extends Stage {
 
         //NAJBITNIJE OVDE
         this.root.setLeft(this.tvBuildingObject);
+        this.root.setCenter(this.saputnici());
         this.root.setRight(this.tvFlightPlaneCombo);
         this.root.setPadding(new Insets(10));
         this.tvBuildingObject.setMinWidth(600);
@@ -37,6 +40,32 @@ public class BuildingView extends Stage {
     }
 
 
+    private VBox saputnici(){
+        VBox vBox = new VBox(10,new Label("Please input your companion!"), this.ime(), this.prezime(), this.godina(),
+                this.btnBuy);
+        vBox.setPadding(new Insets(10));
+        vBox.setAlignment(Pos.CENTER);
+        return vBox;
+    }
+
+    private HBox ime(){
+        HBox hBox = new HBox(10, new Label("First name:"), this.tfime);
+        hBox.setPadding(new Insets(10));
+        hBox.setAlignment(Pos.CENTER);
+        return hBox;
+    }
+    private HBox prezime(){
+        HBox hBox = new HBox(10, new Label("Last name:"), this.tflastName);
+        hBox.setPadding(new Insets(10));
+        hBox.setAlignment(Pos.CENTER);
+        return hBox;
+    }
+    private HBox godina(){
+        HBox hBox = new HBox(10, new Label("Year:"), this.tfgodine);
+        hBox.setPadding(new Insets(10));
+        hBox.setAlignment(Pos.CENTER);
+        return hBox;
+    }
 
 
 
