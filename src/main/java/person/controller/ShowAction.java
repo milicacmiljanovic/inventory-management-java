@@ -3,6 +3,7 @@ package person.controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
+import person.model.FlightPlaneCombo;
 import person.model.MissionPlanetCombo;
 import person.model.Objekat;
 import person.model.StambeniObjekat;
@@ -10,6 +11,7 @@ import person.model.base.Server;
 import person.model.utility.JDBCUtils;
 import person.view.BuildingTable;
 import person.view.BuildingView;
+import person.view.FlighTable;
 
 public class ShowAction implements EventHandler<ActionEvent> {
     private MissionPlanetCombo selectedItem;
@@ -21,9 +23,7 @@ public class ShowAction implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent actionEvent) {
-        final TableView<StambeniObjekat> tvBuildingObject = new BuildingTable(Server.SERVER.getStambeniObjekti());
-        BuildingView bW = new BuildingView(tvBuildingObject);
-        bW.show();
+
         selectedItem = pt.getSelectionModel().getSelectedItem();
         planeta_satelit = new Objekat(selectedItem.getObjekat().getObjekat_id(), selectedItem.getObjekat().getNaziv(),
                 selectedItem.getObjekat().getVrsta(),selectedItem.getObjekat().getUdaljenost_od_zvezde(),selectedItem.getObjekat().getNajniza_temperatura(),
@@ -31,7 +31,15 @@ public class ShowAction implements EventHandler<ActionEvent> {
                 selectedItem.getObjekat().getKolicina_drugog_gasa(),selectedItem.getObjekat().getVisina(),selectedItem.getObjekat().getBrzina_orbitiranja(),
                 selectedItem.getObjekat().getBroj_umrlih());
 
+
+
         Server.SERVER.setStambeniObjekti(JDBCUtils.prikazStambeniObjekat(planeta_satelit.getObjekat_id()));
+        Server.SERVER.setFlightPlaneCombos(JDBCUtils.selectFromVoziloAndPutanja(planeta_satelit.getObjekat_id()));
+
+        final TableView<StambeniObjekat> tvBuildingObject = new BuildingTable(Server.SERVER.getStambeniObjekti());
+        final TableView<FlightPlaneCombo> tvFlightPlaneCombo = new FlighTable(Server.SERVER.getFlightPlaneCombos());
+        BuildingView bW = new BuildingView(tvBuildingObject, tvFlightPlaneCombo);
+        bW.show();
 
     }
 }

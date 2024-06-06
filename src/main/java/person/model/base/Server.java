@@ -20,6 +20,7 @@ public class Server {
     private final List<MissionPlanetCombo> misijeIPlanete = new ArrayList<>();
     private final List<MissionPlanetCombo> misijeIPlaneteInh = new ArrayList<>();
     private final List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
+    private final List<FlightPlaneCombo> flightPlaneCombos = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
@@ -27,6 +28,7 @@ public class Server {
         this.setMisijeIPlanete(JDBCUtils.selectAllMissionsAndObjects());
         this.setMisijeIPlaneteInh(JDBCUtils.selectHabitableMissionsAndObjects());
         this.setStambeniObjekti(JDBCUtils.selectStambeniObjekatFromZus());
+        this.setFlightPlaneCombos(JDBCUtils.selectSelectFlightPlane());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -75,6 +77,15 @@ public class Server {
     public void setStambeniObjekti(Collection<StambeniObjekat> stambeniObjekti){
         this.stambeniObjekti.clear();
         this.stambeniObjekti.addAll(stambeniObjekti);
+    }
+
+    public List<FlightPlaneCombo> getFlightPlaneCombos() {
+        return flightPlaneCombos;
+    }
+
+    public void setFlightPlaneCombos(Collection<FlightPlaneCombo> flightPlaneCombos){
+        this.flightPlaneCombos.clear();
+        this.flightPlaneCombos.addAll(flightPlaneCombos);
     }
 
 }
