@@ -6,6 +6,7 @@ import person.model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -25,30 +26,7 @@ public class JDBCUtils {
         }
     }
 
-    public static ObservableList<StambeniObjekat> prikazStambeniObjekat(int objekat_id){
-        String query = "select * from stambeni_objekti s where s.objekkat_id = " + objekat_id;
-        ObservableList<StambeniObjekat> stambeniObjekti = FXCollections.observableArrayList();
-        try{
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
 
-            StambeniObjekat s;
-            while (resultSet.next()){
-                int stambeni_objekat_id = resultSet.getInt(1);
-                String vrsta_stambenog_objekta = resultSet.getString(2);
-                int kvadratura = resultSet.getInt(3);
-                int broj_Stanara = resultSet.getInt(4);
-                boolean dostupnost = resultSet.getBoolean(5);
-                int objekkat_id = resultSet.getInt(6);
-                s = new StambeniObjekat(stambeni_objekat_id,vrsta_stambenog_objekta, kvadratura, broj_Stanara, dostupnost, objekkat_id);
-                stambeniObjekti.add(s);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return stambeniObjekti;
-    }
 
 
     public static List<Korisnici> selectAllFromZus() {
@@ -141,6 +119,45 @@ public class JDBCUtils {
         }
         return stambeniObjekti;
     }
+
+    public static List<FlightPlaneCombo> selectSelectFlightPlane() {
+
+        String query = "SELECT " +
+                "p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.objekatt_id, p.voziilo_id, p.korisnik_id, " +
+                "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika " +
+                "FROM putovanja p " +
+                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id ";
+        List<FlightPlaneCombo> flightPlaneCombos = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int putovanjeId = resultSet.getInt(1);
+                LocalDate datum = resultSet.getDate(2).toLocalDate();
+                String vreme = resultSet.getString(3);
+                LocalTime localTime = LocalTime.of(Integer.parseInt(vreme.split(":")[0]),
+                        Integer.parseInt(vreme.split(":")[1]));
+                int objekatId = resultSet.getInt(4);
+                int prevoznoSredstvo = resultSet.getInt(5);
+                int korisnikId = resultSet.getInt(6);
+
+                int voziloId = resultSet.getInt(7);
+                int sifra = resultSet.getInt(8);
+                String tip = resultSet.getString(9);
+                int kapacitet = resultSet.getInt(10);
+
+                Putovanje putovanje = new Putovanje(putovanjeId, datum, localTime, objekatId, prevoznoSredstvo, korisnikId);
+                Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
+
+                FlightPlaneCombo flightPlaneCombo = new FlightPlaneCombo(putovanje, vozilo);
+                flightPlaneCombos.add(flightPlaneCombo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return flightPlaneCombos;
+    }
+
 /*
     public static List<StambeniObjekat> selectStambeniObjekatByObjekatId(int objekatId) {
         List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
@@ -292,7 +309,7 @@ public class JDBCUtils {
                 "AND (o.najvisa_temperatura - o.najniza_temperatura) <= 120 " +
                 "AND o.kiseonik BETWEEN 15 AND 25 " +
                 "AND (o.kiseonik + o.kolicina_drugog_gasa) BETWEEN 90 AND 99.99 " +
-                "AND o.visina >= 1 " +
+                "AND o.visina >= 1000 " +
                 "AND o.brzina_orbitiranja BETWEEN 25 AND 35 " +
                 "AND o.broj_umrlih <= 20";
 
@@ -327,6 +344,115 @@ public class JDBCUtils {
         }
         return combinedList;
     }
+
+    public static ObservableList<StambeniObjekat> prikazStambeniObjekat(int objekat_id){
+        String query = "select * from stambeni_objekti s where s.objekkat_id = " + objekat_id;
+        ObservableList<StambeniObjekat> stambeniObjekti = FXCollections.observableArrayList();
+        try{
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            StambeniObjekat s;
+            while (resultSet.next()){
+                int stambeni_objekat_id = resultSet.getInt(1);
+                String vrsta_stambenog_objekta = resultSet.getString(2);
+                int kvadratura = resultSet.getInt(3);
+                int broj_Stanara = resultSet.getInt(4);
+                boolean dostupnost = resultSet.getBoolean(5);
+                int objekkat_id = resultSet.getInt(6);
+                s = new StambeniObjekat(stambeni_objekat_id,vrsta_stambenog_objekta, kvadratura, broj_Stanara, dostupnost, objekkat_id);
+                stambeniObjekti.add(s);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return stambeniObjekti;
+    }
+
+    public static ObservableList<FlightPlaneCombo> selectFromVoziloAndPutanja(int objekat_id) {
+        String query = "SELECT " +
+                "p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.objekatt_id, p.voziilo_id, p.korisnik_id," +
+                "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika " +
+                "FROM putovanja p " +
+                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id "+
+                "where p.objekatt_id = " + objekat_id;
+        ObservableList<FlightPlaneCombo> flightPlaneCombos = FXCollections.observableArrayList();
+        try {
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            FlightPlaneCombo fp;
+            while (resultSet.next()) {
+                int putovanje_id = resultSet.getInt(1);
+                LocalDate datum_kretanja = resultSet.getDate(2).toLocalDate();
+                String vreme_kretanja = resultSet.getString(3);
+                LocalTime localTime = LocalTime.of(Integer.parseInt(vreme_kretanja.split(":")[0]),
+                        Integer.parseInt(vreme_kretanja.split(":")[1]));
+                int objekatt_id = resultSet.getInt(4);
+                int prevoznoSredstvo = resultSet.getInt(5);
+                int korisnikID = resultSet.getInt(6);
+
+                int voziloId = resultSet.getInt(7);
+                int sifra = resultSet.getInt(8);
+                String tip = resultSet.getString(9);
+                int kapacitet = resultSet.getInt(10);
+
+                Putovanje putovanje = new Putovanje(putovanje_id, datum_kretanja, localTime, objekatt_id, prevoznoSredstvo, korisnikID);
+                Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
+
+                fp = new FlightPlaneCombo(putovanje, vozilo);
+                flightPlaneCombos.add(fp);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return flightPlaneCombos;
+    }
+
+/*
+    public static ObservableList<FlightPlaneCombo> selectFromVoziloAndPutanja(int objekat_id) {
+        String query = "SELECT " +
+                "p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.objekatt_id, p.voziilo_id, p.korisnik_id" +
+                "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika" +
+                "FROM putovanja p " +
+                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id"+
+                "where p.objekatt_id" + objekat_id;
+        ObservableList<FlightPlaneCombo> flightPlaneCombos = FXCollections.observableArrayList();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int putovanjeId = resultSet.getInt("putovanje_id");
+                LocalDate datum = resultSet.getDate("datum_kretanja").toLocalDate();
+                LocalTime vreme = resultSet.getTime("vreme_kretanja").toLocalTime();
+                int objekatId = resultSet.getInt("objekatt_id");
+                int prevoznoSredstvo = resultSet.getInt("voziilo_id");
+                int korisnikID = resultSet.getInt("korisnik_id");
+
+                int voziloId = resultSet.getInt("vozilo_id");
+                int sifra = resultSet.getInt("sifra_vozila");
+                String tip = resultSet.getString("vrsta_vozila");
+                int kapacitet = resultSet.getInt("broj_dozvoljenih_putnika");
+
+                Putovanje putovanje = new Putovanje(putovanjeId, datum, vreme, objekatId, prevoznoSredstvo, korisnikID);
+                Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
+
+                FlightPlaneCombo flightPlaneCombo = new FlightPlaneCombo(putovanje, vozilo);
+                flightPlaneCombos.add(flightPlaneCombo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return flightPlaneCombos;
+    }
+
+ */
+
+
+
+
 
     public static void insertIntoZus(Korisnici korisnik) {
         String query = "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja) " +
@@ -363,6 +489,38 @@ public class JDBCUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static void insertIntoZusOsobe(Osobe osobe) {
+        String query = "insert into zus.korisnici (ime, prezime,godine) " +
+                "select ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y') " +
+                "from dual ";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            connection.setAutoCommit(false);
+            statement.setString(1, osobe.getIme());
+            statement.setString(2, osobe.getPrezime());
+            statement.setString(3, osobe.getGodine().getMonthValue() + "/" +
+                    osobe.getGodine().getDayOfMonth() + "/" +
+                    osobe.getGodine().getYear());
+
+            int rowsAffected = statement.executeUpdate();
+            connection.commit();
+
+            if (rowsAffected > 0) {
+                System.out.println("User inserted successfully.");
+            } else {
+                System.out.println("User with this username already exists.");
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static int getNextKorisnikId() {
         String query = "SELECT MAX(korisnik_id) FROM zus.korisnici";

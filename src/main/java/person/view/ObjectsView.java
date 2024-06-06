@@ -33,7 +33,7 @@ public class ObjectsView extends Stage {
 
 
     private final Button btFilterInh = new Button("Inhabitable Objects");
-    private final Button btBuy1 = new Button("Buy");
+    private final Button btShow = new Button("Show");
 
     public ObjectsView() {
         super.setTitle("PlanetView");
@@ -41,21 +41,21 @@ public class ObjectsView extends Stage {
         this.btFilterObj.setOnAction(new FilterControlObject(this.tfPlanetNameFilter, this.tvObjects));
         this.btFilterInh.setOnAction(event -> filterHabitableObjects());
 
-        this.btBuy1.setOnAction(new ShowAction(tvMissionsAndPlanetsInh));
+        this.btShow.setOnAction(new ShowAction(tvMissionsAndPlanetsInh));
 
         this.btFilterInh.setOnAction(event -> {
             filterHabitableObjects();
-            resetBuyButton(); // Reset btBuy1 button
+            resetBuyButton();
         });
 
-        // Add selection listener to enable/disable btBuy1 based on the selected table
+
         this.tvMissionsAndPlanets.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Disable btBuy1 if tvMissionsAndPlanets is selected
-                btBuy1.setDisable(true);
+
+                btShow.setDisable(true);
             } else {
-                // Enable btBuy1 if tvMissionsAndPlanetsInh is selected
-                btBuy1.setDisable(false);
+
+                btShow.setDisable(false);
             }
         });
 
@@ -89,7 +89,7 @@ public class ObjectsView extends Stage {
     }
 
     private VBox vBox2(){
-        VBox vBox = new VBox(10, this.btFilterInh, btBuy1);
+        VBox vBox = new VBox(10, this.btFilterInh, btShow, new Label("Please double click the planet!"));
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         return vBox;
@@ -97,7 +97,7 @@ public class ObjectsView extends Stage {
 
     private HBox filterBox() {
         HBox hbox = new HBox(10, new Label("PlanetName:"), this.tfPlanetNameFilter,
-                this.btFilterObj, this.btFilterInh, this.btBuy1);
+                this.btFilterObj, this.btFilterInh, this.btShow);
         hbox.setPadding(new Insets(10));
         hbox.setAlignment(Pos.CENTER);
         return hbox;
@@ -110,8 +110,7 @@ public class ObjectsView extends Stage {
     }
 
     private void resetBuyButton() {
-        // Enable btBuy1 when btFilterInh is clicked
-        btBuy1.setDisable(false);
+        btShow.setDisable(false);
     }
 
 }
