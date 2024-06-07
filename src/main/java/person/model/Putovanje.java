@@ -29,6 +29,12 @@ public class Putovanje {
         this.voziilo_id = voziilo_id;
     }
 
+    public Putovanje(int putovanje_id, LocalDate datum_kretanja, int objekatt_id) {
+        this.putovanje_id = putovanje_id;
+        this.datum_kretanja = datum_kretanja;
+        this.objekatt_id = objekatt_id;
+    }
+
     public int getPutovanje_id() {
         return putovanje_id;
     }

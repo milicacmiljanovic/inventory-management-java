@@ -25,10 +25,18 @@ public class ShowAction implements EventHandler<ActionEvent> {
     public void handle(ActionEvent actionEvent) {
 
         selectedItem = pt.getSelectionModel().getSelectedItem();
-        planeta_satelit = new Objekat(selectedItem.getObjekat().getObjekat_id(), selectedItem.getObjekat().getNaziv(),
-                selectedItem.getObjekat().getVrsta(),selectedItem.getObjekat().getUdaljenost_od_zvezde(),selectedItem.getObjekat().getNajniza_temperatura(),
-                selectedItem.getObjekat().getNajvisa_temperatura(), selectedItem.getObjekat().getKiseonik(), selectedItem.getObjekat().getDrugi_gas(),
-                selectedItem.getObjekat().getKolicina_drugog_gasa(),selectedItem.getObjekat().getVisina(),selectedItem.getObjekat().getBrzina_orbitiranja(),
+        planeta_satelit = new Objekat(
+                selectedItem.getObjekat().getObjekat_id(),
+                selectedItem.getObjekat().getNaziv(),
+                selectedItem.getObjekat().getVrsta(),
+                selectedItem.getObjekat().getUdaljenost_od_zvezde(),
+                selectedItem.getObjekat().getNajniza_temperatura(),
+                selectedItem.getObjekat().getNajvisa_temperatura(),
+                selectedItem.getObjekat().getKiseonik(),
+                selectedItem.getObjekat().getDrugi_gas(),
+                selectedItem.getObjekat().getKolicina_drugog_gasa(),
+                selectedItem.getObjekat().getVisina(),
+                selectedItem.getObjekat().getBrzina_orbitiranja(),
                 selectedItem.getObjekat().getBroj_umrlih());
 
 

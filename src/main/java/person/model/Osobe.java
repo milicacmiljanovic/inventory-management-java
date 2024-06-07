@@ -1,4 +1,4 @@
-package person.model.utility;
+package person.model;
 
 import java.time.LocalDate;
 
