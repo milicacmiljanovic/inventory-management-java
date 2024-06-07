@@ -2,12 +2,11 @@ package person.model.base;
 
 import person.model.*;
 import person.model.utility.JDBCUtils;
+import person.model.Osobe;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.ToDoubleBiFunction;
 
 public class Server {
 
@@ -21,6 +20,8 @@ public class Server {
     private final List<MissionPlanetCombo> misijeIPlaneteInh = new ArrayList<>();
     private final List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
     private final List<FlightPlaneCombo> flightPlaneCombos = new ArrayList<>();
+    private final List<Osobe> osobe = new ArrayList<>();
+    private final List<Kupljeno> kupljeno = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
@@ -29,6 +30,8 @@ public class Server {
         this.setMisijeIPlaneteInh(JDBCUtils.selectHabitableMissionsAndObjects());
         this.setStambeniObjekti(JDBCUtils.selectStambeniObjekatFromZus());
         this.setFlightPlaneCombos(JDBCUtils.selectSelectFlightPlane());
+        this.setOsobe(JDBCUtils.selectOsobeFromZus());
+        //this.setKupljeno(JDBCUtils.selectFromKupljeno());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -86,6 +89,24 @@ public class Server {
     public void setFlightPlaneCombos(Collection<FlightPlaneCombo> flightPlaneCombos){
         this.flightPlaneCombos.clear();
         this.flightPlaneCombos.addAll(flightPlaneCombos);
+    }
+
+    public List<Osobe> getOsobe() {
+        return osobe;
+    }
+
+    public void setOsobe(Collection<Osobe> osobe){
+        this.osobe.clear();
+        this.osobe.addAll(osobe);
+    }
+
+    public List<Kupljeno> getKupljeno() {
+        return kupljeno;
+    }
+
+    public void setKupljeno(Collection<Kupljeno> kupljeno){
+        this.kupljeno.clear();
+        this.kupljeno.addAll(kupljeno);
     }
 
 }

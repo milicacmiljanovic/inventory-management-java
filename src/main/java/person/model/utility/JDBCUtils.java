@@ -111,7 +111,7 @@ public class JDBCUtils {
                 int kvadratura = resultSet.getInt(3);
                 int broj_stanara = resultSet.getInt(4);
                 boolean dostupnost = resultSet.getBoolean(5);
-                StambeniObjekat stambeni = new StambeniObjekat(stambeni_objekat_id,vrsta_stambenog_objekta,kvadratura, broj_stanara, dostupnost);
+                StambeniObjekat stambeni = new StambeniObjekat(stambeni_objekat_id,vrsta_stambenog_objekta,kvadratura, broj_stanara);
                 stambeniObjekti.add(stambeni);
             }
         } catch (SQLException e) {
@@ -450,7 +450,43 @@ public class JDBCUtils {
 
  */
 
+    public static List<Osobe> selectOsobeFromZus() {
+        List<Osobe> osobe = new ArrayList<>();
+        String query = "select * from zus.osobe"; //ovde ne treba *
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String ime = resultSet.getString(1);
+                String prezime = resultSet.getString(2);;
+                LocalDate godine = resultSet.getDate(3).toLocalDate();
+                Osobe osobee = new Osobe(ime, prezime, godine);
+                osobe.add(osobee);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return osobe;
+    }
 
+    public static List<Kupljeno> selectFromKupljeno() {
+        List<Kupljeno> kupljeno = new ArrayList<>();
+        String query = "select * from zus.kupljeno"; //ovde ne treba *
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int stambeni_objekat_id = resultSet.getInt(1);
+                String vrsta_stambenog_objekta = resultSet.getString(2);
+                LocalDate datum_kretanja = resultSet.getDate(3).toLocalDate();
+                Kupljeno kupljenoo = new Kupljeno(stambeni_objekat_id, vrsta_stambenog_objekta, datum_kretanja);
+                kupljeno.add(kupljenoo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return kupljeno;
+    }
 
 
 
@@ -491,9 +527,8 @@ public class JDBCUtils {
     }
 
     public static void insertIntoZusOsobe(Osobe osobe) {
-        String query = "insert into zus.korisnici (ime, prezime,godine) " +
-                "select ?, ?, ?, ?, STR_TO_DATE(?, '%m/%d/%Y') " +
-                "from dual ";
+        String query = "insert into zus.osobe (Ime, Prezime, Godine) " +
+                "values (?, ?, STR_TO_DATE(?, '%m/%d/%Y'))";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             connection.setAutoCommit(false);
@@ -536,6 +571,8 @@ public class JDBCUtils {
             throw new RuntimeException("Error retrieving next korisnik_id", e);
         }
     }
+
+
 
 
     private JDBCUtils() {
