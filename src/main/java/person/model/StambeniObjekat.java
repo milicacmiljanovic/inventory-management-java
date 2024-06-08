@@ -9,7 +9,7 @@ public class StambeniObjekat {
     private int objekkat_id;
 
     // Constructor, getters, setters
-    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara) {
+    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost) {
         this.stambeni_objekat_id = stambeni_objekat_id;
         this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
         this.kvadratura = kvadratura;
@@ -72,4 +72,15 @@ public class StambeniObjekat {
     public void setDostupnost(boolean dostupnost) {
         this.dostupnost = dostupnost;
     }
+
+    public int getObjekkat_id() {
+        return objekkat_id;
+    }
+
+    public void setObjekkat_id(int objekkat_id) {
+        this.objekkat_id = objekkat_id;
+    }
+
+
+
 }

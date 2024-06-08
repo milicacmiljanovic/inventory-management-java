@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Server {
 
+    private int korisnik_id;
     public static final Server SERVER = new Server();
 
     private final List<Korisnici> korisnici = new ArrayList<>();
@@ -20,18 +21,21 @@ public class Server {
     private final List<MissionPlanetCombo> misijeIPlaneteInh = new ArrayList<>();
     private final List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
     private final List<FlightPlaneCombo> flightPlaneCombos = new ArrayList<>();
+    private final List<Kupovina> kupovinas = new ArrayList<>();
+    private final List<PlanetObjectFlightCombo> planetObjectFlightCombos = new ArrayList<>();
     private final List<Osobe> osobe = new ArrayList<>();
-    private final List<Kupljeno> kupljeno = new ArrayList<>();
+    //private final List<Kupljeno> kupljeno = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
         this.setObjekti(JDBCUtils.selectObjekatFromZus());
         this.setMisijeIPlanete(JDBCUtils.selectAllMissionsAndObjects());
         this.setMisijeIPlaneteInh(JDBCUtils.selectHabitableMissionsAndObjects());
-        this.setStambeniObjekti(JDBCUtils.selectStambeniObjekatFromZus());
+        this.setStambeniObjekti(JDBCUtils.selectAvailableStambeniObjekatFromZus());
         this.setFlightPlaneCombos(JDBCUtils.selectSelectFlightPlane());
         this.setOsobe(JDBCUtils.selectOsobeFromZus());
-        //this.setKupljeno(JDBCUtils.selectFromKupljeno());
+        this.setKupovinas(JDBCUtils.selectKupovineFromZus());
+        //this.setPlanetObjectFlightCombos(JDBCUtils.selectPlanetObjectFlight());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -100,13 +104,29 @@ public class Server {
         this.osobe.addAll(osobe);
     }
 
-    public List<Kupljeno> getKupljeno() {
-        return kupljeno;
+    public List<Kupovina> getKupovinas() {
+        return kupovinas;
     }
 
-    public void setKupljeno(Collection<Kupljeno> kupljeno){
-        this.kupljeno.clear();
-        this.kupljeno.addAll(kupljeno);
+    public void setKupovinas(Collection<Kupovina> kupovinas){
+        this.kupovinas.clear();
+        this.kupovinas.addAll(kupovinas);
     }
 
+    public List<PlanetObjectFlightCombo> getPlanetObjectFlightCombos() {
+        return planetObjectFlightCombos;
+    }
+
+    public void setPlanetObjectFlightCombos(Collection<PlanetObjectFlightCombo> planetObjectFlightCombos){
+        this.planetObjectFlightCombos.clear();
+        this.planetObjectFlightCombos.addAll(planetObjectFlightCombos);
+    }
+
+    public int getKorisnik_id() {
+        return korisnik_id;
+    }
+
+    public void setKorisnik_id(int korisnik_id) {
+        this.korisnik_id = korisnik_id;
+    }
 }

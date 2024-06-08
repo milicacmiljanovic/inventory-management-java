@@ -7,15 +7,17 @@ public class Putovanje {
     private final int putovanje_id;
     private LocalDate datum_kretanja;
     private LocalTime vreme_kretanja;
+    private boolean dostupnost;
     private int objekatt_id;
     private int voziilo_id;
     private int korisnik_id;
 
 
-    public Putovanje(int putovanje_id, LocalDate datum_kretanja, LocalTime vreme_kretanja, int objekatt_id, int voziilo_id, int korisnik_id) {
+    public Putovanje(int putovanje_id, LocalDate datum_kretanja, LocalTime vreme_kretanja, boolean dostupnost, int objekatt_id, int voziilo_id, int korisnik_id) {
         this.putovanje_id = putovanje_id;
         this.datum_kretanja = datum_kretanja;
         this.vreme_kretanja = vreme_kretanja;
+        this.dostupnost = dostupnost;
         this.objekatt_id = objekatt_id;
         this.voziilo_id = voziilo_id;
         this.korisnik_id = korisnik_id;
@@ -77,5 +79,13 @@ public class Putovanje {
 
     public void setKorisnik_id(int korisnik_id) {
         this.korisnik_id = korisnik_id;
+    }
+
+    public boolean isDostupnost() {
+        return dostupnost;
+    }
+
+    public void setDostupnost(boolean dostupnost) {
+        this.dostupnost = dostupnost;
     }
 }
