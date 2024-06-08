@@ -18,8 +18,8 @@ public class MissionsTable extends TableView<MissionPlanetCombo> {
         super(FXCollections.observableArrayList(values));
 
         TableColumn<MissionPlanetCombo, String> tcMissionName = new TableColumn<>("Mission Name");
-        TableColumn<MissionPlanetCombo, Integer> tcMissionId = new TableColumn<>("Mission ID");
-        TableColumn<MissionPlanetCombo, Integer> tcObjectId = new TableColumn<>("Object ID");
+        //TableColumn<MissionPlanetCombo, Integer> tcMissionId = new TableColumn<>("Mission ID");
+        //TableColumn<MissionPlanetCombo, Integer> tcObjectId = new TableColumn<>("Object ID");
         TableColumn<MissionPlanetCombo, String> tcFirstName = new TableColumn<>("Planet Name");
         TableColumn<MissionPlanetCombo, String> tcPlanetType = new TableColumn<>("Planet Type");
         TableColumn<MissionPlanetCombo, Integer> tcStarDistance = new TableColumn<>("Star Distance");
@@ -50,7 +50,7 @@ public class MissionsTable extends TableView<MissionPlanetCombo> {
             MissionPlanetCombo combo = cellData.getValue();
             return new SimpleStringProperty(combo != null ? combo.getMissionName() : null);
         });
-
+/*
         tcMissionId.setCellValueFactory(cellData -> {
             MissionPlanetCombo combo = cellData.getValue();
             Misija misija = combo != null ? combo.getMisija() : null;
@@ -62,6 +62,8 @@ public class MissionsTable extends TableView<MissionPlanetCombo> {
             Objekat objekat = cellData.getValue().getObjekat();
             return new SimpleIntegerProperty(objekat != null ? objekat.getObjekat_id() : 0).asObject();
         });
+
+ */
 
 // For Naziv
         tcFirstName.setCellValueFactory(cellData -> {
@@ -150,7 +152,7 @@ public class MissionsTable extends TableView<MissionPlanetCombo> {
             }
         });
 
-        super.getColumns().addAll(tcMissionName, tcMissionId, tcObjectId, tcFirstName, tcPlanetType, tcStarDistance, tcLowestTemp,
+        super.getColumns().addAll(tcMissionName, tcFirstName, tcPlanetType, tcStarDistance, tcLowestTemp,
                 tcHighestTemp, tcOxygen, tcOtherGas, tcPercentageOfOtherGas, tcHeight, tcOrbitalVelocity, tcNumberOfDeaths);
     }
 }

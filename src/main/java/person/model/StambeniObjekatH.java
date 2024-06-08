@@ -1,6 +1,6 @@
 package person.model;
 
-public class StambeniObjekat {
+public class StambeniObjekatH {
     private int stambeni_objekat_id;
     private String vrsta_stambenog_objekta;
     private int kvadratura;
@@ -10,7 +10,7 @@ public class StambeniObjekat {
     private int vlasnik_id;
 
     // Constructor, getters, setters
-    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost, int vlasnik_id) {
+    public StambeniObjekatH(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost, int vlasnik_id) {
         this.stambeni_objekat_id = stambeni_objekat_id;
         this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
         this.kvadratura = kvadratura;
@@ -19,7 +19,7 @@ public class StambeniObjekat {
         this.vlasnik_id = vlasnik_id;
     }
 
-    public StambeniObjekat(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost) {
+    public StambeniObjekatH(int stambeni_objekat_id, String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, boolean dostupnost) {
         this.stambeni_objekat_id = stambeni_objekat_id;
         this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
         this.kvadratura = kvadratura;
@@ -29,7 +29,7 @@ public class StambeniObjekat {
     }
 
 
-    public StambeniObjekat(String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, int objekkat_id) {
+    public StambeniObjekatH(String vrsta_stambenog_objekta, int kvadratura, int broj_stanara, int objekkat_id) {
         this.vrsta_stambenog_objekta = vrsta_stambenog_objekta;
         this.kvadratura = kvadratura;
         this.broj_stanara = broj_stanara;

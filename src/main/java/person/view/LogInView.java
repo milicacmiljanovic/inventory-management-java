@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import person.model.Korisnici;
 import person.model.base.DataBase;
 import person.model.utility.JDBCUtils;
 
@@ -77,6 +78,7 @@ public class LogInView extends Application{
     private void handleLogin(String username, String password, Stage primaryStage) {
         if (databaseService.validateUser(username, password)) {
             openObjectView(primaryStage);
+
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Error");

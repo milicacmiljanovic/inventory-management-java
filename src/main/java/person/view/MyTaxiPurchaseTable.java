@@ -6,23 +6,19 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import person.model.FlightPlaneCombo;
-import person.model.Putovanje;
-import person.model.StambeniObjekat;
-import person.model.Vozilo;
+import person.model.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public class FlighTable extends TableView<FlightPlaneCombo> {
 
-    public FlighTable(List<FlightPlaneCombo> values) {
+public class MyTaxiPurchaseTable extends TableView<FlighPlaneComboH> {
+    public MyTaxiPurchaseTable(List<FlighPlaneComboH> values) {
         super(FXCollections.observableArrayList(values));
 
 /*
-        TableColumn<FlightPlaneCombo, Integer> tcID = new TableColumn<>("putovanje_id");
+        TableColumn<FlighPlaneComboH, Integer> tcID = new TableColumn<>("putovanje_id");
         tcID.setCellValueFactory(cellData -> {
             Putovanje putovanje = cellData.getValue().getPutovanje();
             return new SimpleIntegerProperty(putovanje != null ? putovanje.getPutovanje_id() : 0).asObject();
@@ -30,58 +26,57 @@ public class FlighTable extends TableView<FlightPlaneCombo> {
 
  */
 
-        TableColumn<FlightPlaneCombo, LocalDate> tcDate = new TableColumn<>("Departure Date");
+        TableColumn<FlighPlaneComboH, LocalDate> tcDate = new TableColumn<>("Departure Date");
         tcDate.setCellValueFactory(cellData -> {
             Putovanje putovanje = cellData.getValue().getPutovanje();
             return new SimpleObjectProperty<>(putovanje != null ? putovanje.getDatum_kretanja() : null);
         });
 
-        TableColumn<FlightPlaneCombo, LocalTime> tcTime = new TableColumn<>("Departure Time");
+        TableColumn<FlighPlaneComboH, LocalTime> tcTime = new TableColumn<>("Departure Time");
         tcTime.setCellValueFactory(cellData -> {
             Putovanje putovanje = cellData.getValue().getPutovanje();
             return new SimpleObjectProperty<>(putovanje != null ? putovanje.getVreme_kretanja() : null);
         });
 /*
-        TableColumn<FlightPlaneCombo, Integer> tcVNum = new TableColumn<>("objekatt_id");
+        TableColumn<FlighPlaneComboH, Integer> tcVNum = new TableColumn<>("objekatt_id");
         tcVNum.setCellValueFactory(cellData -> {
             Putovanje putovanje = cellData.getValue().getPutovanje();
             return new SimpleIntegerProperty(putovanje != null ? putovanje.getObjekatt_id() : 0).asObject();
         });
 
-        TableColumn<FlightPlaneCombo, Integer> tcType = new TableColumn<>("voziilo_id");
+        TableColumn<FlighPlaneComboH, Integer> tcType = new TableColumn<>("voziilo_id");
         tcType.setCellValueFactory(cellData -> {
             Putovanje putovanje = cellData.getValue().getPutovanje();
             return new SimpleIntegerProperty(putovanje != null ? putovanje.getVoziilo_id() : 0).asObject();
         });
 
-        TableColumn<FlightPlaneCombo, Integer> tcPNum = new TableColumn<>("korisnik_id");
+        TableColumn<FlighPlaneComboH, Integer> tcPNum = new TableColumn<>("korisnik_id");
         tcPNum.setCellValueFactory(cellData -> {
             Putovanje putovanje = cellData.getValue().getPutovanje();
             return new SimpleIntegerProperty(putovanje != null ? putovanje.getKorisnik_id() : 0).asObject();
         });
 
-        TableColumn<FlightPlaneCombo, Integer> tcVID = new TableColumn<>("vozilo_id");
+        TableColumn<FlighPlaneComboH, Integer> tcVID = new TableColumn<>("vozilo_id");
         tcVID.setCellValueFactory(cellData -> {
             Vozilo vozilo = cellData.getValue().getVozilo();
             return new SimpleIntegerProperty(vozilo != null ? vozilo.getVozilo_id() : 0).asObject();
         });
 
-
-        TableColumn<FlightPlaneCombo, String> tcVType = new TableColumn<>("sifra_vozila");
+        TableColumn<FlighPlaneComboH, String> tcVType = new TableColumn<>("sifra_vozila");
         tcVType.setCellValueFactory(cellData -> {
             Vozilo vozilo = cellData.getValue().getVozilo();
             return new SimpleStringProperty(vozilo != null ? String.valueOf(vozilo.getSifra_vozila()) : "");
         });
 
-
  */
-        TableColumn<FlightPlaneCombo, String> tcVTypee = new TableColumn<>("Type of Vehicle");
+
+        TableColumn<FlighPlaneComboH, String> tcVTypee = new TableColumn<>("Type of Vehicle");
         tcVTypee.setCellValueFactory(cellData -> {
             Vozilo vozilo = cellData.getValue().getVozilo();
             return new SimpleStringProperty(vozilo != null ? vozilo.getVrsta_vozila() : "");
         });
 /*
-        TableColumn<FlightPlaneCombo, Integer> tcNUmber = new TableColumn<>("broj_dozvoljenih_putnika");
+        TableColumn<FlighPlaneComboH, Integer> tcNUmber = new TableColumn<>("broj_dozvoljenih_putnika");
         tcNUmber.setCellValueFactory(cellData -> {
             Vozilo vozilo = cellData.getValue().getVozilo();
             return new SimpleIntegerProperty(vozilo != null ? vozilo.getBroj_dozvoljenih_putnika() : 0).asObject();
@@ -91,6 +86,4 @@ public class FlighTable extends TableView<FlightPlaneCombo> {
 
         getColumns().addAll(tcDate, tcTime, tcVTypee);
     }
-
-    }
-
+}
