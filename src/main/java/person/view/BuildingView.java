@@ -1,5 +1,6 @@
 package person.view;
 
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,6 +36,15 @@ public class BuildingView extends Stage {
         this.btnAddOsobe.setOnAction(new AddOsobaControl(this.tfime, this.tflastName, this.tfgodine));
         this.btnBuyHome.setOnAction(new BuyHomeControl(tvBuildingObject1));
         this.btnBuyTicket.setOnAction(new BuyTicketControl(tvFlightPlaneCombo1));
+
+        // Setup TableView selection listener to refresh btnBuyHome state
+        tvBuildingObject1.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                btnBuyHome.setDisable(false); // Enable Buy Residential Unit button when an item is selected
+            } else {
+                btnBuyHome.setDisable(true); // Disable Buy Residential Unit button when no item is selected
+            }
+        });
 
 
 
@@ -89,6 +99,11 @@ public class BuildingView extends Stage {
         hBox.setPadding(new Insets(10));
         hBox.setAlignment(Pos.CENTER);
         return hBox;
+    }
+
+    // Method to refresh TableView if needed
+    public void refreshBuildingObjectTableView() {
+        tvBuildingObject1.setItems(FXCollections.observableArrayList(Server.SERVER.getStambeniObjekti()));
     }
 
 

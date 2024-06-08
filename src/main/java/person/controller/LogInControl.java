@@ -3,6 +3,7 @@ package person.controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import person.model.base.Server;
 import person.model.utility.JDBCUtils;
 import person.view.ObjectsView;
 

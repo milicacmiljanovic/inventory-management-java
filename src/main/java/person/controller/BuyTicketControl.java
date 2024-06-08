@@ -31,12 +31,12 @@ public class BuyTicketControl implements EventHandler<ActionEvent> {
                 // Update the database
                 boolean updated = JDBCUtils.updateDostupnost(selectedPutovanje.getPutovanje_id(), false);
                 if (updated) {
-                    System.out.println("Dostupnost updated to false for putovanje_id: " + selectedPutovanje.getPutovanje_id());
+                    System.out.println("Ticket bought successfully.");
                 } else {
-                    System.out.println("Failed to update dostupnost for putovanje_id: " + selectedPutovanje.getPutovanje_id());
+                    System.out.println("Failed to buy.");
                 }
             } else {
-                System.out.println("Dostupnost is already false for putovanje_id: " + selectedPutovanje.getPutovanje_id());
+                System.out.println("Ticket is already bought");
             }
         } else {
             System.out.println("No item selected");

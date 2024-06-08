@@ -3,6 +3,7 @@ package person.model.utility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import person.model.*;
+import person.model.base.Server;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -10,6 +11,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import static java.sql.DriverManager.getConnection;
 
 public class JDBCUtils {
 
@@ -20,7 +23,7 @@ public class JDBCUtils {
         properties.put("user", "root");
         properties.put("password", "");
         try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/zus", properties);
+            connection = getConnection("jdbc:mysql://localhost:3306/zus", properties);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -48,6 +51,22 @@ public class JDBCUtils {
         }
         return korisnici;
     }
+
+    public static int selectKorisnikId(String username) {
+        int korisnikId = 0;
+        String query = "SELECT korisnik_id FROM zus.korisnici WHERE username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                korisnikId = resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving korisnik_id for username: " + username, e);
+        }
+        return korisnikId;
+    }
+
     public static List<Objekat> selectObjekatFromZus() {
         List<Objekat> objekti = new ArrayList<>();
         String query = "select o.objekat_id, o.naziv, o.vrsta, count(m.misija_id) as broj_misija " +
@@ -111,7 +130,8 @@ public class JDBCUtils {
                 int kvadratura = resultSet.getInt("kvadratura");
                 int broj_stanara = resultSet.getInt("broj_stanara");
                 boolean dostupnost = resultSet.getBoolean("dostupnost");
-                StambeniObjekat stambeni = new StambeniObjekat(stambeni_objekat_id, vrsta_stambenog_objekta, kvadratura, broj_stanara, dostupnost);
+                int vlasnik_id = resultSet.getInt("vlasnik_id");
+                StambeniObjekat stambeni = new StambeniObjekat(stambeni_objekat_id, vrsta_stambenog_objekta, kvadratura, broj_stanara, dostupnost, vlasnik_id);
                 stambeniObjekti.add(stambeni);
             }
         } catch (SQLException e) {
@@ -120,10 +140,67 @@ public class JDBCUtils {
         return stambeniObjekti;
     }
 
-    public static boolean updateStambeniObjekatAvailability(int stambeniObjekatId, boolean newAvailability) {
+    public static List<StambeniObjekatH> prikazStambeniObjekatHS() {
+        List<StambeniObjekatH> stambeniObjekti = new ArrayList<>();
+        String query = "SELECT * FROM zus.stambeni_objekti WHERE dostupnost = 0";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int stambeni_objekat_id = resultSet.getInt("stambeni_objekat_id");
+                String vrsta_stambenog_objekta = resultSet.getString("vrsta_stambenog_objekta");
+                int kvadratura = resultSet.getInt("kvadratura");
+                int broj_stanara = resultSet.getInt("broj_stanara");
+                boolean dostupnost = resultSet.getBoolean("dostupnost");
+                int vlasnik_id = resultSet.getInt("vlasnik_id");
+                StambeniObjekatH stambeni = new StambeniObjekatH(stambeni_objekat_id, vrsta_stambenog_objekta, kvadratura, broj_stanara, dostupnost, vlasnik_id);
+                stambeniObjekti.add(stambeni);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return stambeniObjekti;
+    }
+
+    public static List<StambeniObjekat> selectUnavailableStambeniObjekatFromZus() {
+        List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
+        String query = "SELECT * FROM zus.stambeni_objekti WHERE dostupnost = 0";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int stambeni_objekat_id = resultSet.getInt("stambeni_objekat_id");
+                String vrsta_stambenog_objekta = resultSet.getString("vrsta_stambenog_objekta");
+                int kvadratura = resultSet.getInt("kvadratura");
+                int broj_stanara = resultSet.getInt("broj_stanara");
+                boolean dostupnost = resultSet.getBoolean("dostupnost");
+                int vlasnik_id = resultSet.getInt("vlasnik_id");
+                StambeniObjekat stambeni = new StambeniObjekat(stambeni_objekat_id, vrsta_stambenog_objekta, kvadratura, broj_stanara, dostupnost, vlasnik_id);
+                stambeniObjekti.add(stambeni);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return stambeniObjekti;
+    }
+
+    public static boolean updateStambeniObjekatDostupnost(int stambeniObjekatId, boolean dostupnost) {
         String query = "UPDATE stambeni_objekti SET dostupnost = ? WHERE stambeni_objekat_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setBoolean(1, newAvailability);
+            statement.setBoolean(1, dostupnost);
+            statement.setInt(2, stambeniObjekatId);
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateStambeniObjekatVlasnikId(int stambeniObjekatId, int vlasnikId) {
+        String query = "UPDATE stambeni_objekti SET vlasnik_id = ? WHERE stambeni_objekat_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, vlasnikId);
             statement.setInt(2, stambeniObjekatId);
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
@@ -153,7 +230,8 @@ public class JDBCUtils {
                 "p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.dostupnost, p.objekatt_id, p.voziilo_id, p.korisnik_id, " +
                 "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika " +
                 "FROM putovanja p " +
-                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id ";
+                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id " +
+                "WHERE p.dostupnost = 1";
         List<FlightPlaneCombo> flightPlaneCombos = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
@@ -178,6 +256,46 @@ public class JDBCUtils {
                 Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
 
                 FlightPlaneCombo flightPlaneCombo = new FlightPlaneCombo(putovanje, vozilo);
+                flightPlaneCombos.add(flightPlaneCombo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return flightPlaneCombos;
+    }
+
+    public static List<FlighPlaneComboH> selectUnavailableFlightPlaneCombosH() {
+        String query = "SELECT " +
+                "p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.dostupnost, p.objekatt_id, p.voziilo_id, p.korisnik_id, " +
+                "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika " +
+                "FROM putovanja p " +
+                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id " +
+                "WHERE p.dostupnost = 0"; // Filtering for dostupnost = false
+
+        List<FlighPlaneComboH> flightPlaneCombos = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                int putovanjeId = resultSet.getInt(1);
+                LocalDate datum = resultSet.getDate(2).toLocalDate();
+                String vreme = resultSet.getString(3);
+                LocalTime localTime = LocalTime.of(Integer.parseInt(vreme.split(":")[0]),
+                        Integer.parseInt(vreme.split(":")[1]));
+                boolean dostupnost = resultSet.getBoolean(4);
+                int objekatId = resultSet.getInt(5);
+                int prevoznoSredstvo = resultSet.getInt(6);
+                int korisnikId = resultSet.getInt(7);
+
+                int voziloId = resultSet.getInt(8);
+                int sifra = resultSet.getInt(9);
+                String tip = resultSet.getString(10);
+                int kapacitet = resultSet.getInt(11);
+
+                Putovanje putovanje = new Putovanje(putovanjeId, datum, localTime, dostupnost, objekatId, prevoznoSredstvo, korisnikId);
+                Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
+
+                FlighPlaneComboH flightPlaneCombo = new FlighPlaneComboH(putovanje, vozilo);
                 flightPlaneCombos.add(flightPlaneCombo);
             }
         } catch (SQLException e) {

@@ -25,6 +25,8 @@ public class Server {
     private final List<PlanetObjectFlightCombo> planetObjectFlightCombos = new ArrayList<>();
     private final List<Osobe> osobe = new ArrayList<>();
     //private final List<Kupljeno> kupljeno = new ArrayList<>();
+    private final List<StambeniObjekatH> stambeniObjekatHS = new ArrayList<>();
+    private final List<FlighPlaneComboH> flightPlaneCombosH = new ArrayList<>();
 
     private Server() {
         this.setKorisnici(JDBCUtils.selectAllFromZus());
@@ -36,6 +38,8 @@ public class Server {
         this.setOsobe(JDBCUtils.selectOsobeFromZus());
         this.setKupovinas(JDBCUtils.selectKupovineFromZus());
         //this.setPlanetObjectFlightCombos(JDBCUtils.selectPlanetObjectFlight());
+        this.setStambeniObjekatHS(JDBCUtils.prikazStambeniObjekatHS());
+        this.setFlightPlaneCombosH(JDBCUtils.selectUnavailableFlightPlaneCombosH());
 
         //OVDE IDE PRVO U JDBC UPIT selectMisijeFromZus !!!!!!!!!!!!!!!!
         //this.setMisije(JDBCUtils.);
@@ -121,6 +125,25 @@ public class Server {
         this.planetObjectFlightCombos.clear();
         this.planetObjectFlightCombos.addAll(planetObjectFlightCombos);
     }
+
+    public List<StambeniObjekatH> getStambeniObjekatHS() {
+        return stambeniObjekatHS;
+    }
+
+    public void setStambeniObjekatHS(Collection<StambeniObjekatH> stambeniObjekatHS){
+        this.stambeniObjekatHS.clear();
+        this.stambeniObjekatHS.addAll(stambeniObjekatHS);
+    }
+
+    public List<FlighPlaneComboH> getFlightPlaneCombosH() {
+        return flightPlaneCombosH;
+    }
+
+    public void setFlightPlaneCombosH(Collection<FlighPlaneComboH> flightPlaneCombosH){
+        this.flightPlaneCombosH.clear();
+        this.flightPlaneCombosH.addAll(flightPlaneCombosH);
+    }
+
 
     public int getKorisnik_id() {
         return korisnik_id;

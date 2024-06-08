@@ -10,9 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import person.controller.FilterControlObject;
+import person.controller.MyHomePurchasesControl;
+import person.controller.MyTaxiPurchasesControl;
 import person.controller.ShowAction;
+import person.model.FlightPlaneCombo;
 import person.model.MissionPlanetCombo;
 import person.model.Objekat;
+import person.model.StambeniObjekat;
 import person.model.base.Server;
 import person.model.utility.JDBCUtils;
 
@@ -35,6 +39,9 @@ public class ObjectsView extends Stage {
     private final Button btFilterInh = new Button("Inhabitable Objects");
     private final Button btShow = new Button("Show");
 
+    private final Button btMyHomePurchases = new Button("My Home Purchases");
+    private final Button btMyTaxiPurchases = new Button("My Taxi Purchases");
+
     public ObjectsView() {
         super.setTitle("PlanetView");
 
@@ -42,6 +49,9 @@ public class ObjectsView extends Stage {
         this.btFilterInh.setOnAction(event -> filterHabitableObjects());
 
         this.btShow.setOnAction(new ShowAction(tvMissionsAndPlanetsInh));
+
+        this.btMyHomePurchases.setOnAction(new MyHomePurchasesControl());
+        this.btMyTaxiPurchases.setOnAction(new MyTaxiPurchasesControl());
 
         this.btFilterInh.setOnAction(event -> {
             filterHabitableObjects();
@@ -75,7 +85,14 @@ public class ObjectsView extends Stage {
     }
 
     private VBox vBox(){
-        VBox vBox = new VBox(10,this.hBox() ,tvObjects);
+        VBox vBox = new VBox(10,this.hBox() ,tvObjects,this.purchases());
+        vBox.setPadding(new Insets(10));
+        vBox.setAlignment(Pos.CENTER);
+        return vBox;
+    }
+    //OVDEEEE
+    private VBox purchases(){
+        VBox vBox = new VBox(10, this.btMyHomePurchases, this.btMyTaxiPurchases);
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         return vBox;

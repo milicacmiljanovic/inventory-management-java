@@ -23,6 +23,26 @@ public class BuyHomeControl implements EventHandler<ActionEvent> {
     }
 
     public void handle(ActionEvent actionEvent) {
+        int korisnikId = Server.SERVER.getKorisnik_id();// Get the currently logged-in user's ID
+        System.out.println(korisnikId);
+
+        StambeniObjekat selectedObjekat = st.getSelectionModel().getSelectedItem();
+        if (selectedObjekat != null) {
+            // Update dostupnost in the database
+            boolean dostupnostUpdated = JDBCUtils.updateStambeniObjekatDostupnost(selectedObjekat.getStambeni_objekat_id(), false);
+            if (dostupnostUpdated) {
+                selectedObjekat.setDostupnost(false); // Update locally in TableView if needed
+                System.out.println("Home bought successfully.");
+            } else {
+                System.err.println("Failed to buy.");
+            }
+        } else {
+            System.err.println("No item selected.");
+        }
+    }
+/*
+    public void handle(ActionEvent actionEvent) {
+        Server.SERVER.getKorisnik_id();
         /*
 
         selectedItem = st.getSelectionModel().getSelectedItem();
@@ -42,7 +62,7 @@ public class BuyHomeControl implements EventHandler<ActionEvent> {
 
 
 
-         */
+
 
         System.out.println("Rade domovi");
 
@@ -63,6 +83,19 @@ public class BuyHomeControl implements EventHandler<ActionEvent> {
         }
 
 
+// Update vlasnik_id in the database
+                boolean vlasnikIdUpdated = JDBCUtils.updateStambeniObjekatVlasnikId(selectedObjekat.getStambeni_objekat_id(), korisnikId);
+                if (vlasnikIdUpdated) {
+                    selectedObjekat.setVlasnik_id(korisnikId); // Update locally in TableView if needed
+                    System.out.println("Vlasnik_id updated successfully.");
+                } else {
+                    System.err.println("Failed to update vlasnik_id.");
+                }
+
+
+
+
     }
+    */
 
 }
