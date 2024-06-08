@@ -16,15 +16,15 @@ public class MyHomePurchaseTable extends TableView<StambeniObjekatH> {
         TableColumn<StambeniObjekatH, Integer> tcBuildingId = new TableColumn<>("ID");
         TableColumn<StambeniObjekatH, String> tcType = new TableColumn<>("Type");
         TableColumn<StambeniObjekatH, Integer> tcSize = new TableColumn<>("Size");
-        TableColumn<StambeniObjekatH, Integer> tcNumOfPeople = new TableColumn<>("Num Of People");
-        TableColumn<StambeniObjekatH, Boolean> tcAvailability = new TableColumn<>("Availability");
+        //TableColumn<StambeniObjekatH, Integer> tcNumOfPeople = new TableColumn<>("Num Of People");
+        //TableColumn<StambeniObjekatH, Boolean> tcAvailability = new TableColumn<>("Availability");
 
         tcBuildingId.setCellValueFactory(new PropertyValueFactory<>("stambeni_objekat_id"));
         tcType.setCellValueFactory(new PropertyValueFactory<>("vrsta_stambenog_objekta"));
         tcSize.setCellValueFactory(new PropertyValueFactory<>("kvadratura"));
-        tcNumOfPeople.setCellValueFactory(new PropertyValueFactory<>("broj_stanara"));
-        tcAvailability.setCellValueFactory(new PropertyValueFactory<>("dostupnost"));
+        //tcNumOfPeople.setCellValueFactory(new PropertyValueFactory<>("broj_stanara"));
+        //tcAvailability.setCellValueFactory(new PropertyValueFactory<>("dostupnost"));
 
-        super.getColumns().addAll(tcBuildingId,tcType,tcSize,tcNumOfPeople,tcAvailability);
+        super.getColumns().addAll(tcBuildingId,tcType,tcSize);
     }
 }

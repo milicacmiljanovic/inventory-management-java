@@ -53,7 +53,8 @@ public class BuildingView extends Stage {
         this.root.setCenter(this.saputnici());
         this.root.setRight(this.ticket());
         this.root.setPadding(new Insets(10));
-        this.tvBuildingObject1.setMinWidth(600);
+        this.tvBuildingObject1.setMinWidth(400);
+        this.tvFlightPlaneCombo1.setMinWidth(600);
         //this.root.setRight(this.tvMissions);
 
         super.setScene(new Scene(this.root));
@@ -76,7 +77,7 @@ public class BuildingView extends Stage {
 
 
     private VBox saputnici(){
-        VBox vBox = new VBox(10,new Label("Please input your companion!"), this.ime(), this.prezime(), this.godina(), this.btnAddOsobe);
+        VBox vBox = new VBox(new Label("Please input your companion!"), this.ime(), this.prezime(), this.godina(), this.btnAddOsobe);
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         return vBox;

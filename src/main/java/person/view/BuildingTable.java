@@ -15,19 +15,19 @@ public class BuildingTable extends TableView<StambeniObjekat> {
     public BuildingTable(List<StambeniObjekat> values) {
         super(FXCollections.observableArrayList(values));
 
-        TableColumn<StambeniObjekat, Integer> tcBuildingId = new TableColumn<>("ID");
+        //TableColumn<StambeniObjekat, Integer> tcBuildingId = new TableColumn<>("ID");
         TableColumn<StambeniObjekat, String> tcType = new TableColumn<>("Type");
         TableColumn<StambeniObjekat, Integer> tcSize = new TableColumn<>("Size");
-        TableColumn<StambeniObjekat, Integer> tcNumOfPeople = new TableColumn<>("Num Of People");
-        TableColumn<StambeniObjekat, Boolean> tcAvailability = new TableColumn<>("Availability");
+        //TableColumn<StambeniObjekat, Integer> tcNumOfPeople = new TableColumn<>("Num Of People");
+        //TableColumn<StambeniObjekat, Boolean> tcAvailability = new TableColumn<>("Availability");
 
-        tcBuildingId.setCellValueFactory(new PropertyValueFactory<>("stambeni_objekat_id"));
+        //tcBuildingId.setCellValueFactory(new PropertyValueFactory<>("stambeni_objekat_id"));
         tcType.setCellValueFactory(new PropertyValueFactory<>("vrsta_stambenog_objekta"));
         tcSize.setCellValueFactory(new PropertyValueFactory<>("kvadratura"));
-        tcNumOfPeople.setCellValueFactory(new PropertyValueFactory<>("broj_stanara"));
-        tcAvailability.setCellValueFactory(new PropertyValueFactory<>("dostupnost"));
+        //tcNumOfPeople.setCellValueFactory(new PropertyValueFactory<>("broj_stanara"));
+        //tcAvailability.setCellValueFactory(new PropertyValueFactory<>("dostupnost"));
 
-        super.getColumns().addAll(tcBuildingId,tcType,tcSize,tcNumOfPeople,tcAvailability);
+        super.getColumns().addAll(tcType,tcSize);
         /*
         super.getColumns().add(tcBuildingId);
         super.getColumns().add(tcType);
