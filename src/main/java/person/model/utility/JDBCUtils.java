@@ -196,7 +196,7 @@ public class JDBCUtils {
             return false;
         }
     }
-
+/*
     public static boolean updateStambeniObjekatVlasnikId(int stambeniObjekatId, int vlasnikId) {
         String query = "UPDATE stambeni_objekti SET vlasnik_id = ? WHERE stambeni_objekat_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -209,6 +209,8 @@ public class JDBCUtils {
             return false;
         }
     }
+
+ */
 
     public static boolean updateDostupnost(int putovanje_id, boolean dostupnost) {
         String query = "UPDATE putovanja SET dostupnost = ? WHERE putovanje_id = ?";
@@ -270,7 +272,7 @@ public class JDBCUtils {
                 "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika " +
                 "FROM putovanja p " +
                 "JOIN vozilo v ON p.voziilo_id = v.vozilo_id " +
-                "WHERE p.dostupnost = 0"; // Filtering for dostupnost = false
+                "WHERE p.dostupnost = 0";
 
         List<FlighPlaneComboH> flightPlaneCombos = new ArrayList<>();
         try {
@@ -304,30 +306,6 @@ public class JDBCUtils {
         return flightPlaneCombos;
     }
 
-/*
-    public static List<StambeniObjekat> selectStambeniObjekatByObjekatId(int objekatId) {
-        List<StambeniObjekat> stambeniObjekti = new ArrayList<>();
-        String query = "SELECT * FROM zus.stambeni_objekti WHERE objekat_id = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, objekatId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    int stambeniObjekatId = resultSet.getInt("stambeni_objekat_id");
-                    String vrstaStambenogObjekta = resultSet.getString("vrsta_stambenog_objekta");
-                    int kvadratura = resultSet.getInt("kvadratura");
-                    int brojStanara = resultSet.getInt("broj_stanara");
-                    boolean dostupnost = resultSet.getBoolean("dostupnost");
-                    StambeniObjekat stambeni = new StambeniObjekat(stambeniObjekatId, vrstaStambenogObjekta, kvadratura, brojStanara, dostupnost, objekatId);
-                    stambeniObjekti.add(stambeni);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return stambeniObjekti;
-    }
-
- */
     public static List<Korisnici> selectFromPerson(String firstName, String lastName, String yearOfBirth) {
         List<Korisnici> korisnici = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT * FROM zus.korisnici WHERE 1=1");
@@ -556,45 +534,6 @@ public class JDBCUtils {
         return flightPlaneCombos;
     }
 
-/*
-    public static ObservableList<FlightPlaneCombo> selectFromVoziloAndPutanja(int objekat_id) {
-        String query = "SELECT " +
-                "p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.objekatt_id, p.voziilo_id, p.korisnik_id" +
-                "v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika" +
-                "FROM putovanja p " +
-                "JOIN vozilo v ON p.voziilo_id = v.vozilo_id"+
-                "where p.objekatt_id" + objekat_id;
-        ObservableList<FlightPlaneCombo> flightPlaneCombos = FXCollections.observableArrayList();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                int putovanjeId = resultSet.getInt("putovanje_id");
-                LocalDate datum = resultSet.getDate("datum_kretanja").toLocalDate();
-                LocalTime vreme = resultSet.getTime("vreme_kretanja").toLocalTime();
-                int objekatId = resultSet.getInt("objekatt_id");
-                int prevoznoSredstvo = resultSet.getInt("voziilo_id");
-                int korisnikID = resultSet.getInt("korisnik_id");
-
-                int voziloId = resultSet.getInt("vozilo_id");
-                int sifra = resultSet.getInt("sifra_vozila");
-                String tip = resultSet.getString("vrsta_vozila");
-                int kapacitet = resultSet.getInt("broj_dozvoljenih_putnika");
-
-                Putovanje putovanje = new Putovanje(putovanjeId, datum, vreme, objekatId, prevoznoSredstvo, korisnikID);
-                Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
-
-                FlightPlaneCombo flightPlaneCombo = new FlightPlaneCombo(putovanje, vozilo);
-                flightPlaneCombos.add(flightPlaneCombo);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return flightPlaneCombos;
-    }
-
- */
-
     public static List<Osobe> selectOsobeFromZus() {
         List<Osobe> osobe = new ArrayList<>();
         String query = "select * from zus.osobe"; //ovde ne treba *
@@ -613,27 +552,6 @@ public class JDBCUtils {
         }
         return osobe;
     }
-
-    public static List<Kupljeno> selectFromKupljeno() {
-        List<Kupljeno> kupljeno = new ArrayList<>();
-        String query = "select * from zus.kupljeno"; //ovde ne treba *
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                int stambeni_objekat_id = resultSet.getInt(1);
-                String vrsta_stambenog_objekta = resultSet.getString(2);
-                LocalDate datum_kretanja = resultSet.getDate(3).toLocalDate();
-                Kupljeno kupljenoo = new Kupljeno(stambeni_objekat_id, vrsta_stambenog_objekta, datum_kretanja);
-                kupljeno.add(kupljenoo);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return kupljeno;
-    }
-
-
 
     public static void insertIntoZus(Korisnici korisnik) {
         String query = "insert into zus.korisnici (ime, prezime, username, password, datum_rodjenja) " +
@@ -736,169 +654,6 @@ public class JDBCUtils {
         }
         return kupovina;
     }
-
-    public static void insertIntoKupovina(int korisnik_id, int objekat_id, int putovanje_id) {
-        String query = "insert into kupovine (korisnik_id, objekat_id,putovanje_id) " +
-                "values (?, ?, ?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
-            statement.setInt(1,korisnik_id);
-            statement.setInt(2,objekat_id);
-            statement.setInt(3,putovanje_id);
-            statement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static List<PlanetObjectFlightCombo> selectFromIntoPlanetObjectFlightCombo(){
-        ObservableList<PlanetObjectFlightCombo> planeteObjekatiPutovanja = FXCollections.observableArrayList();
-        String query = "insert into kupovine (korisnik_id, objekat_id,putovanje_id) " +
-                "values (?, ?, ?)";
-        try{
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()){
-                String naziv_planete = resultSet.getString(1);
-                String naziv_objekta = resultSet.getString(2);
-                String prevoz = resultSet.getString(3);
-                LocalDate datum = resultSet.getDate(4).toLocalDate();
-                LocalTime vreme = resultSet.getTime(5).toLocalTime();
-
-                PlanetObjectFlightCombo pop = new PlanetObjectFlightCombo(naziv_planete,naziv_objekta,prevoz,datum,vreme);
-                planeteObjekatiPutovanja.add(pop);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return planeteObjekatiPutovanja;
-    }
-
-
-    public static ObservableList<PlanetObjectFlightCombo> insertIntoPlanetObjectFlightCombo(int korisnik_id){
-        ObservableList<PlanetObjectFlightCombo> planeteObjekatiPutovanja = FXCollections.observableArrayList();
-        String query = "SELECT ps.ime,s.naziv,p.prevozno_sredstvo,p.datum_polaska,p.vreme " +
-                "FROM kupovine k join putovanja p on k.putovanje_id = p.putovanje_id " +
-                "join stambeni_objekti s on s.objekat_id = p.stambeni_objekat_idd " +
-                "join planete_sateliti ps on ps.planeta_satelit_id = p.destinacija WHERE " +
-                "k.korisnik_id = " + korisnik_id;
-        try{
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()){
-                String naziv_planete = resultSet.getString(1);
-                String naziv_objekta = resultSet.getString(2);
-                String prevoz = resultSet.getString(3);
-                LocalDate datum = resultSet.getDate(4).toLocalDate();
-                LocalTime vreme = resultSet.getTime(5).toLocalTime();
-
-                PlanetObjectFlightCombo pop = new PlanetObjectFlightCombo(naziv_planete,naziv_objekta,prevoz,datum,vreme);
-                planeteObjekatiPutovanja.add(pop);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return planeteObjekatiPutovanja;
-    }
-
-    public static void insertIntoPutovanje(int korisnik_idd, int destinacija, int stambeni_objekat_idd, String prevozno_sredstvo,
-                                           LocalDate datum_polaska,LocalTime vreme) {
-        String query = "insert into putovanja (korisnik_idd, destinacija, stambeni_objekat_idd, prevozno_sredstvo, datum_polaska, vreme) " +
-                "values (?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement statement = connection.prepareStatement(query);
-            connection.setAutoCommit(false);
-            statement.setInt(1,korisnik_idd);
-            statement.setInt(2, destinacija);
-            statement.setInt(3, stambeni_objekat_idd);
-            statement.setString(4,prevozno_sredstvo);
-            statement.setDate(5, Date.valueOf(datum_polaska));
-            statement.setTime(6, Time.valueOf(vreme));
-            statement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public static List<PlanetObjectFlightCombo> selectPlanetObjectFlight() {
-
-        String query = "SELECT " +
-                " p.putovanje_id, p.datum_kretanja, p.vreme_kretanja, p.dostupnost, p.objekatt_id, p.voziilo_id, p.korisnik_id, " +
-                " v.vozilo_id, v.sifra_vozila, v.vrsta_vozila, v.broj_dozvoljenih_putnika, " +
-                " o.objekat_id, o.naziv, o.vrsta, o.udaljenost_od_zvezde, o.najniza_temperatura, o.najvisa_temperatura, o.kiseonik, o.drugi_gas, o.kolicina_drugog_gasa, o.visina, o.brzina_orbitiranja, o.broj_umrlih, o.broj_misija, " +
-                " s.stambeni_objekat_id, s.vrsta_stambenog_objekta, s.kvadratura, s.broj_stanara, s.dostupnost, s.objekkat_id " +
-                " FROM putovanja p " +
-                " JOIN vozilo v ON p.voziilo_id = v.vozilo_id " +
-                " JOIN objekti o ON p.objekatt_id = o.objekat_id " +
-                " JOIN stambeni_objekti s ON o.objekat_id = s.objekkat_id ";
-        List<PlanetObjectFlightCombo> flightPlaneCombos = new ArrayList<>();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                int putovanjeId = resultSet.getInt(1);
-                LocalDate datum = resultSet.getDate(2).toLocalDate();
-                String vreme = resultSet.getString(3);
-                LocalTime localTime = LocalTime.of(Integer.parseInt(vreme.split(":")[0]),
-                        Integer.parseInt(vreme.split(":")[1]));
-                boolean dostupnost1 = resultSet.getBoolean(4);
-                int objekatId = resultSet.getInt(5);
-                int prevoznoSredstvo = resultSet.getInt(6);
-                int korisnikId = resultSet.getInt(7);
-
-                int voziloId = resultSet.getInt(8);
-                int sifra = resultSet.getInt(9);
-                String tip = resultSet.getString(10);
-                int kapacitet = resultSet.getInt(11);
-
-                int objekat_id = resultSet.getInt(12);
-                String naziv = resultSet.getString(13);
-                String vrsta = resultSet.getString(14);
-                int udaljenost_od_zvezde = resultSet.getInt(15);
-                int najniza_temperatura = resultSet.getInt(16);
-                int najvisa_temperatura = resultSet.getInt(17);
-                double kiseonik = resultSet.getDouble(18); // Changed to double
-                String drugi_gas = resultSet.getString(19);
-                double kolicina_drugog_gasa = resultSet.getDouble(20);
-                int visina = resultSet.getInt(21);
-                int brzina_orbitiranja = resultSet.getInt(22);
-                int broj_umrlih = resultSet.getInt(23);
-
-                int stambeni_objekat_id = resultSet.getInt(24);
-                String vrsta_stambenog_objekta = resultSet.getString(25);
-                int kvadratura = resultSet.getInt(26);
-                int broj_stanara = resultSet.getInt(27);
-                boolean dostupnost = resultSet.getBoolean(28);
-                int objekkat_id = resultSet.getInt(29);
-
-
-                Putovanje putovanje = new Putovanje(putovanjeId, datum, localTime, dostupnost1, objekatId, prevoznoSredstvo, korisnikId);
-                Vozilo vozilo = new Vozilo(voziloId, sifra, tip, kapacitet);
-                Objekat objekat = new Objekat(objekatId, naziv, vrsta, udaljenost_od_zvezde, najniza_temperatura, najvisa_temperatura, (int) kiseonik, drugi_gas, (int) kolicina_drugog_gasa, visina, brzina_orbitiranja, broj_umrlih);
-                StambeniObjekat stambeni_objekat = new StambeniObjekat(stambeni_objekat_id, vrsta_stambenog_objekta, kvadratura, broj_stanara, dostupnost, objekkat_id);
-
-                PlanetObjectFlightCombo planetObjectFlightCombo = new PlanetObjectFlightCombo(putovanje, vozilo, objekat, stambeni_objekat);
-                flightPlaneCombos.add(planetObjectFlightCombo);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return flightPlaneCombos;
-    }
-
-
-
-
 
     private JDBCUtils() {
 
