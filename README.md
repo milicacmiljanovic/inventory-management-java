@@ -1,37 +1,65 @@
-# Java Store Management System
+# Space Agency Database Application
 
-Java application for managing store inventory and purchases, developed as part of a university database course.
+A Java desktop application for managing a fictional space agency's database — people, missions, flights, habitable objects, and real estate transactions. Built with a full MVC architecture on top of JDBC.
 
-## Technologies
+**Course:** Databases · School of Computing, University of Belgrade  
+**Team:** Milica Cmiljanović, Tijana Ignjatov  
+**Language:** Java · JDBC · Swing
 
-- Java
-- Maven
-- SQL
-- JDBC
+---
 
-## Features
+## What This Does
 
-- Manage persons and customers
-- Track purchased products
-- Store and query purchase data
-- SQL database integration
+Provides a GUI for browsing, filtering, and interacting with a relational database covering the operations of a space agency. Users can log in, view missions and flights, manage habitable objects (space stations, planets), and record purchase transactions.
 
-## Project Structure
+### Features
+- Login / registration with server-side authentication
+- Tabular views for: People, Missions, Flights, Objects, Buildings
+- Filtering and search across all entity types
+- Record purchases (real estate and taxi rides for space agency personnel)
+- View personal purchase history per user
+- MVC separation — model handles all DB calls, controllers handle logic, views are pure Swing
 
-src/main/java – Java source code  
-zus.sql – database schema  
-pom.xml – Maven configuration
+---
+
+## Architecture
+
+```
+src/main/java/person/
+ ├── model/
+ │    ├── base/         # Server.java, DataBase.java — connection management
+ │    ├── utility/      # JDBCUtils — query helpers
+ │    └── *.java        # Entity classes (Misija, Putovanje, Kupovina, ...)
+ ├── view/              # Swing panels and tables for each entity
+ │    ├── MainView.java
+ │    ├── MissionsTable.java
+ │    ├── FlighTable.java
+ │    └── ...
+ └── controller/        # Event handlers and business logic
+      ├── LogInControl.java
+      ├── BuyTicketControl.java
+      ├── FilterControl.java
+      └── ...
+```
+
+---
+
+## Tech Stack
+
+- **Java** with **Swing** for the desktop GUI
+- **JDBC** for all database communication
+- **Maven** for dependency management and build
+- Relational database with entities: Persons, Missions, Flights, Planets, Habitable Objects, Vehicles, Purchases
+
+---
 
 ## How to Run
 
-1. Clone the repository
+Configure the database connection in `Server.java`, then build and run via Maven:
 
-git clone https://github.com/yourusername/java-store-management-system
+```bash
+mvn clean package
+java -jar target/<artifact>.jar
+```
 
-2. Create the database using `zus.sql`
-
-3. Build the project
-
-mvn install
-
-4. Run the application
+Requires a running database instance with the schema loaded.
